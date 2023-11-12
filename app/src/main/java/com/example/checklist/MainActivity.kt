@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.checklist.databinding.ActivityMainBinding
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +21,27 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        FirebaseApp.initializeApp(this)
+
+        //example writing to database for Accounts:
+        val database : Database = Database()
+
+
+        database.writeNewAccount("bob", "hi")
+        database.getAccount("bob","hi")
+
+        //example creating new group
+        database.writeNewGroup("Bakers","we bake desserts")
+        database.getGroup("Bakers")
+        
+        //example creating a group participantlist within a group
+        database.writeGroupParticipant("Bakers","bob")
+        database.writeGroupParticipant("Bakers","rob")
+        database.getGroupParticipants("Bakers")
+
+
+
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
