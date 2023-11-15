@@ -26,7 +26,8 @@
         </activity>
         <activity
             android:name=".CreateAccountActivity"
-            android:exported="true"/>
+            android:exported="true"
+            android:theme="@style/Theme.CheckList.NoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
