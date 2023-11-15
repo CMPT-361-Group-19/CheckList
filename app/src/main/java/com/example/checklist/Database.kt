@@ -53,6 +53,17 @@ class Database {
         Log.d("inside", "returning false")
     }
 
+    fun checkUniqueUsername(username : String, callback: (Boolean) -> Unit) {
+        database = Firebase.database.reference
+
+        database.child("accounts").child(username).get().addOnSuccessListener() {
+            Log.i("insdie:", "Got value ${it.value.toString()}")
+            callback(it.value == null)
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting data", it)
+        }
+    }
+
     @IgnoreExtraProperties
     data class Group(val groupId: String? = null, val desc: String? = null)
 

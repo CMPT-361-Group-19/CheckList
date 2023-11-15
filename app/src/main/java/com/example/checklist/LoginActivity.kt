@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signInTextClicked(){
-        val intent = Intent(this,ChecklistActivity::class.java)
+        val intent = Intent(this,CreateAccountActivity::class.java)
         startActivity(intent)
     }
 
