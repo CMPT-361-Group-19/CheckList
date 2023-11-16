@@ -1,19 +1,27 @@
 package com.example.checklist
 
 import android.util.Log
+import com.example.checklist.Database.Group
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.IgnoreExtraProperties
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 
 class Database {
     private lateinit var database : DatabaseReference
 
     @IgnoreExtraProperties
-    data class Account(val username : String? = null, val password : String?)
+    data class Account(val username : String? = null, val password : String?) {
+        // Secondary constructor for Firebase deserialization
+        constructor() : this("", "")
+    }
 
     //write account to database
     fun writeNewAccount(username: String, password: String) {
@@ -24,18 +32,20 @@ class Database {
     }
 
     //read from database
-    //prints account info in logcat for reference
-    fun getAccount(username: String, password: String) : Account? {
-        var data: Account? = null
+    suspend fun getAccount(username: String, password: String) : Account? {
         database = Firebase.database.reference
-        database.child("accounts").child(username).get().addOnSuccessListener {
-            Log.i("firebase", "Got value ${it.value}")
-            //data = it.getValue(Account::class.java)
+        val dataSnapshot = database.child("accounts").get().await()
 
-        }.addOnFailureListener{
-            Log.e("firebase", "Error getting data", it)
+        for (snapshot in dataSnapshot.children) {
+            val account = snapshot.getValue(Account::class.java)
+            if (account != null) {
+                if (account.username == username) {
+
+                    return account
+                }
+            }
         }
-        return data
+        return null // Account not found
     }
 
     fun validSignInCredentials(username: String, password: String,callback: (Boolean) -> Unit) {
@@ -53,39 +63,48 @@ class Database {
         Log.d("inside", "returning false")
     }
 
-    fun checkUniqueUsername(username : String, callback: (Boolean) -> Unit) {
-        database = Firebase.database.reference
-
-        database.child("accounts").child(username).get().addOnSuccessListener() {
-            Log.i("insdie:", "Got value ${it.value.toString()}")
-            callback(it.value == null)
-        }.addOnFailureListener{
-            Log.e("firebase", "Error getting data", it)
-        }
-    }
-
-    @IgnoreExtraProperties
-    data class Group(val groupId: String? = null, val desc: String? = null)
+    data class Group(var groupId: String? = null, var desc: String? = null)
 
     //write group to database
     fun writeNewGroup(groupId: String, desc: String) {
         val group = Group(groupId,desc)
         database = Firebase.database.reference
-        database.child("groups").child(groupId).setValue(group)
+        val groupRef = database.child("groups").child(groupId).setValue(group)
+
     }
 
-    //get the group associated with the group id
-    fun getGroup(groupId: String): Group? {
-        var data: Group? = null
+
+    suspend fun getGroup(groupName: String): Group? {
         database = Firebase.database.reference
-        val groupResult = database.child("groups").child(groupId).get().addOnSuccessListener {
-            Log.i("firebase", "Got value ${it.value}")
+        val dataSnapshot = database.child("groups").get().await()
 
+        for (snapshot in dataSnapshot.children) {
+            val group = snapshot.getValue(Group::class.java)
+            if (group?.groupId == groupName) {
 
-        }.addOnFailureListener{
-            Log.e("firebase", "Error getting data", it)
+                return group
+            }
         }
-        return data
+        return null // Group not found
+    }
+
+
+
+
+
+    //return the list of groups in the database
+    suspend fun getGroupList() : ArrayList<Group> {
+        var groupList:ArrayList<Group> = ArrayList<Group>()
+        database = Firebase.database.reference
+        val dataSnapshot = database.child("groups").get().await()
+        for (snapshot in dataSnapshot.children) {
+            val group = snapshot.getValue(Group::class.java)
+            if (group != null) {
+                groupList.add(group)
+            }
+        }
+        return groupList
+
     }
 
 
@@ -102,25 +121,18 @@ class Database {
     }
 
     //returns an arraylist of Strings that contains usernames of the participants of a particular group
-    fun getGroupParticipants(groupId: String) : ArrayList<String> {
+    suspend fun getGroupParticipants(groupId: String) : ArrayList<String> {
 
         var participantList: ArrayList<String> = ArrayList<String>()
         database = Firebase.database.reference
-        val groupResult = database.child("groups").child(groupId).child("participants").get().addOnSuccessListener {
-            Log.i("firebase", "Got value ${it.value}")
-            for (childSnapshot in it.children) {
-                // Get the value of the username
-                val value = childSnapshot.value
-                participantList.add(value.toString())
-                // Print or do something with the key and value
-                Log.d("FirebaseData", "Key: $groupId, Value: $value")
+        val dataSnapshot = database.child("groups").child(groupId).child("participants").get().await()
+        for (snapshot in dataSnapshot.children) {
+            val username = snapshot.getValue(String::class.java)
+            if (username != null) {
+                participantList.add(username)
             }
-        }.addOnFailureListener{
-            Log.e("firebase", "Error getting data", it)
         }
-
         return participantList
     }
-
-
+    
 }
