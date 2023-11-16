@@ -11,6 +11,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class Database {
@@ -26,7 +27,8 @@ class Database {
     fun writeNewAccount(username: String, password: String) {
         val account = Account(username,password)
         database = Firebase.database.reference
-        database.child("accounts").child(username).setValue(account)
+        database.child("accounts").child(username).child("username").setValue(username)
+        database.child("accounts").child(username).child("password").setValue(password)
     }
 
     //read from database
@@ -46,9 +48,33 @@ class Database {
         return null // Account not found
     }
 
+    fun validSignInCredentials(username: String, password: String,callback: (Boolean) -> Unit) {
+        var data: Account = Account(username,password)
+        database = Firebase.database.reference
+        database.child("accounts").child(username).child("password").get().addOnSuccessListener {
+            Log.i("firebase", "Got value ${it.value} $password")
+            callback(it.value == password)
+
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting data", it)
+            callback(false)
+
+        }
+        Log.d("inside", "returning false")
+    }
+
+    fun checkUniqueUsername(username : String, callback: (Boolean) -> Unit) {
+        database = Firebase.database.reference
+
+        database.child("accounts").child(username).get().addOnSuccessListener() {
+            Log.i("insdie:", "Got value ${it.value.toString()}")
+            callback(it.value == null)
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting data", it)
+        }
+    }
 
     data class Group(var groupId: String? = null, var desc: String? = null)
-
 
     //write group to database
     fun writeNewGroup(groupId: String, desc: String) {
