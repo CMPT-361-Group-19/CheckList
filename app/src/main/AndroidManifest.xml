@@ -16,6 +16,9 @@
             android:name=".ChecklistActivity"
             android:exported="false" />
         <activity
+            android:name=".GroupViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
@@ -27,7 +30,7 @@
         <activity
             android:name=".CreateAccountActivity"
             android:exported="true"
-            android:theme="@style/Theme.CheckList.NoActionBar"/>
+            android:theme="@style/Theme.CheckList.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

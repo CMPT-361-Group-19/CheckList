@@ -33,7 +33,9 @@ class LoginActivity : AppCompatActivity() {
         database.validSignInCredentials(usernameField, passwordField){ isValid ->
             if(isValid) {
                 Log.d("inside", "you are clicking $isValid")
-                val intent = Intent(this, ChecklistActivity::class.java)
+                val sharedPreferences = getSharedPreferences("Checklist", MODE_PRIVATE)
+                sharedPreferences.edit().putString("username",usernameField).apply()
+                val intent = Intent(this, GroupViewActivity::class.java)
                 startActivity(intent)
             }
             else {
