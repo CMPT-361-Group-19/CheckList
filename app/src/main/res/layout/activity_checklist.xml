@@ -4,12 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/checklist"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        ></ImageView>
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/groupName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="To do List"></TextView>
+        android:textSize="30dp"
+        android:text="default"
+        android:textColor="@color/navy_blue"
+        android:textAlignment="center"
+        android:textStyle="bold"></TextView>
 <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/checklist_recycler_view"
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="ADD"
+        android:background="@drawable/rounded_color_view_navy_blue"
+        android:layout_gravity="center">
+    </Button>
 </LinearLayout>

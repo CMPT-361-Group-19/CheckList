@@ -1,9 +1,13 @@
 package com.example.checklist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.checklist.viewmodel.ChecklistItem
@@ -20,6 +24,8 @@ class ChecklistActivity : AppCompatActivity() {
         Log.d(tag," inside checklist")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checklist)
+
+        findViewById<TextView>(R.id.groupName).text = groupIdentifier
 
         viewModel = ViewModelProvider(this)[ChecklistViewModel::class.java]
 
@@ -41,8 +47,27 @@ class ChecklistActivity : AppCompatActivity() {
             checkListAdapter.updateDataset(it)
             checkListAdapter.notifyDataSetChanged()
         }
-        Log.d(tag," inside checklist4")
 
-        Log.d(tag," inside checklist5")
+        findViewById<Button>(R.id.addButton).setOnClickListener{
+            val intent = Intent(this,AddItemActivity::class.java)
+            startActivity(intent)
+        }
+
+        ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val itemToDelete = viewModel.groupItems.value?.get(viewHolder.adapterPosition)?.item
+                itemToDelete?.let {viewModel.deleteItemIfValid(groupIdentifier,it,username)}
+            }
+        }).attachToRecyclerView(recyclerView)
+
+
     }
 }

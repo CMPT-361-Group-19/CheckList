@@ -203,9 +203,9 @@ class Database {
             database = Firebase.database.reference
                 database.child("groups").child(groupId).child("items").child(checklistItem.item)
                     .setValue(checklistItem)
-
         }
     }
+
 
     fun attachGroupItemListener(groupId: String){
         database = Firebase.database.reference
@@ -217,6 +217,18 @@ class Database {
         database = Firebase.database.reference
         database.child("groups").child(groupId).child("items").child(item).child("checked").setValue(isChecked)
 
+    }
+
+    suspend fun deleteItemIfValidUser(groupId: String, item: String, username: String): Boolean{
+        database = Firebase.database.reference
+        val snapShot = database.child("groups").child(groupId).child("items").child(item).child("username").get().await()
+        if(snapShot.value.toString() == username){
+            Log.d("look", "removing val $item $username")
+            snapShot.ref.parent?.removeValue()
+            return true
+        }
+        Log.d("look", "removed val $item $username")
+        return false
     }
     
 }

@@ -1,11 +1,15 @@
 package com.example.checklist.viewmodel
 
+import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.checklist.Database
+import com.example.checklist.SelectedPlace
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 
 class ChecklistViewModel(): ViewModel() {
@@ -35,6 +39,19 @@ class ChecklistViewModel(): ViewModel() {
             database.changeItemStatus(groupId, item, username, isChecked)
         }
     }
+
+    fun deleteItemIfValid(groupId: String, item: String, username: String){
+        viewModelScope.launch {
+            if(database.deleteItemIfValidUser(groupId,item,username)){
+//                Toast.makeText(this@ChecklistViewModel,"Item Deleted",Toast.LENGTH_SHORT).show()
+                Log.d(tag, "deleted")
+                }
+            else {
+                Log.d(tag, "not deleted")
+
+            }
+        }
+    }
 }
 
-data class ChecklistItem(val item: String, var isChecked: String, val username: String)
+data class ChecklistItem(val item: String, var isChecked: String, val username: String, val selectedPlace: SelectedPlace? = null)

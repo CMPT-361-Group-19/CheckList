@@ -12,4 +12,6 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="create_account"><u>Create Account</u></string>
+
+    <string name="apiKey">AIzaSyCptop7KgWFY9t9wAUpWhAGF5HvPEBEP2E</string>
 </resources>
