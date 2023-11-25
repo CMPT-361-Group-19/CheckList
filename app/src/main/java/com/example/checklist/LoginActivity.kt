@@ -34,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
             if(isValid) {
                 Log.d("inside", "you are clicking $isValid")
                 val intent = Intent(this, ChecklistActivity::class.java)
+                intent.putExtra("user", usernameField)
                 startActivity(intent)
             }
             else {
