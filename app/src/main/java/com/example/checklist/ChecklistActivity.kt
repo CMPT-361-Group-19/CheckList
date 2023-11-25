@@ -1,29 +1,73 @@
 package com.example.checklist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.GridView
+import android.util.Log
+import android.widget.Button
 import android.widget.TextView
-import com.example.checklist.ui.home.GridviewAdapter
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.checklist.viewmodel.ChecklistItem
+import com.example.checklist.viewmodel.ChecklistViewModel
 
 class ChecklistActivity : AppCompatActivity() {
+    private val tag = "ChecklistActivity"
+//    private lateinit var groupIdentifier: String
+    private val groupIdentifier: String = "Bakers"
+
+    private lateinit var viewModel: ChecklistViewModel
+    private lateinit var username: String
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(tag," inside checklist")
         super.onCreate(savedInstanceState)
-
-//        val groupIconImg = findViewById<TextView>(R.id.groupIconImage)
-//        val groupname = findViewById<TextView>(R.id.groupName)
-
         setContentView(R.layout.activity_checklist)
-        val gridView = findViewById<GridView>(R.id.gridView)
 
-        val groupnames = mutableListOf<String>("bakers", "roommates", "family")
+        findViewById<TextView>(R.id.groupName).text = groupIdentifier
 
-        val adapter = GridviewAdapter(this, groupnames)
-        gridView.adapter = adapter
+        viewModel = ViewModelProvider(this)[ChecklistViewModel::class.java]
 
-        gridView.setOnItemClickListener{_, _, pos, id ->
+        viewModel.getGroupItems(groupIdentifier)
 
+        username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
+        val dataset: ArrayList<ChecklistItem>? = viewModel.groupItems.value
+
+        val checkListAdapter = ChecklistAdapter(dataset,viewModel,groupIdentifier,username)
+
+        val recyclerView: RecyclerView = findViewById(R.id.checklist_recycler_view)
+        recyclerView.adapter = checkListAdapter
+        recyclerView.layoutManager = LinearLayoutManager(this);
+        Log.d(tag," inside checklist2 ${viewModel.groupItems.value}")
+
+
+        viewModel.groupItems.observe(this){
+            Log.d(tag," inside checklist3")
+            checkListAdapter.updateDataset(it)
+            checkListAdapter.notifyDataSetChanged()
         }
+
+        findViewById<Button>(R.id.addButton).setOnClickListener{
+            val intent = Intent(this,AddItemActivity::class.java)
+            startActivity(intent)
+        }
+
+        ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val itemToDelete = viewModel.groupItems.value?.get(viewHolder.adapterPosition)?.item
+                itemToDelete?.let {viewModel.deleteItemIfValid(groupIdentifier,it,username)}
+            }
+        }).attachToRecyclerView(recyclerView)
+
+
     }
 }
