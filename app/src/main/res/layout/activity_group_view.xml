@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:background="@drawable/rounded_corner_view_grey"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:id="@+id/newGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="3dp"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:text="New Group"/>
+
+        <TextView
+            android:id="@+id/subtextNewGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/newGroupTitle"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="15sp"
+            android:text="Create your own or join one!"/>
+
+        <Button
+            android:id="@+id/addGroupButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="New Group" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:background="@drawable/rounded_corner_view_grey">
+
+        <TextView
+            android:id="@+id/textMyGroups"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="3dp"
+            android:textStyle="bold"
+            android:textSize="27sp"
+            android:text="My Groups"/>
+
+        <TextView
+            android:id="@+id/subtextMyGroups"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textMyGroups"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="15sp"
+            android:text="You have 0 groups."/>
+
+        <GridView
+            android:id="@+id/gridView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/subtextMyGroups"
+            android:gravity="center"
+            android:horizontalSpacing="8dp"
+            android:numColumns="2"
+            android:verticalSpacing="8dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

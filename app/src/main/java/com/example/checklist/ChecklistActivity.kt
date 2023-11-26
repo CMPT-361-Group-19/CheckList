@@ -5,64 +5,71 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.GridView
 import android.widget.TextView
-import androidx.lifecycle.lifecycleScope
-import com.example.checklist.ui.home.GridviewAdapter
-import kotlinx.coroutines.launch
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.checklist.viewmodel.ChecklistItem
+import com.example.checklist.viewmodel.ChecklistViewModel
 
 class ChecklistActivity : AppCompatActivity() {
+    private val tag = "ChecklistActivity"
+//    private lateinit var groupIdentifier: String
+    private var groupIdentifier: String = "Bakers"
 
-    private lateinit var database: Database
+    private lateinit var viewModel: ChecklistViewModel
     private lateinit var username: String
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(tag," inside checklist")
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_checklist)
 
-//        val groupIconImg = findViewById<TextView>(R.id.groupIconImage)
-//        val groupname = findViewById<TextView>(R.id.groupName)
+        groupIdentifier = intent.getStringExtra("group identifier").toString()
 
-        database = Database()
-        username = intent.getStringExtra("user")!!
-    }
+        findViewById<TextView>(R.id.groupName).text = groupIdentifier
 
-    private fun processRestOfPage(groupList : ArrayList<String>) {
-        val gridView = findViewById<GridView>(R.id.gridView)
+        viewModel = ViewModelProvider(this)[ChecklistViewModel::class.java]
 
-        var numGroups = groupList.size
+        viewModel.getGroupItems(groupIdentifier)
 
-        val adapter = GridviewAdapter(this, groupList)
-        gridView.adapter = adapter
-        val textView = findViewById<TextView>(R.id.subtextMyGroups)
-        textView.text = "You have ${numGroups.toString()} groups."
+        username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
+        val dataset: ArrayList<ChecklistItem>? = viewModel.groupItems.value
 
-        Log.d("groups:", groupList.toString())
+        val checkListAdapter = ChecklistAdapter(dataset,viewModel,groupIdentifier,username)
 
-        findViewById<Button>(R.id.addGroupButton).setOnClickListener {newGroupClicked()}
+        val recyclerView: RecyclerView = findViewById(R.id.checklist_recycler_view)
+        recyclerView.adapter = checkListAdapter
+        recyclerView.layoutManager = LinearLayoutManager(this);
+        Log.d(tag," inside checklist2 ${viewModel.groupItems.value}")
 
-        gridView.setOnItemClickListener{_, _, pos, id ->
 
+        viewModel.groupItems.observe(this){
+            Log.d(tag," inside checklist3")
+            checkListAdapter.updateDataset(it)
+            checkListAdapter.notifyDataSetChanged()
         }
-    }
 
-    private fun newGroupClicked() {
-        val intent = Intent(this,NewGroupActivity::class.java)
-        intent.putExtra("user", username)
-        startActivity(intent)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        Log.d("debug", "OnResume")
-
-        lifecycleScope.launch {
-            val groupList = database.getGroupsWithUser(username)
-
-            kotlinx.coroutines.delay(200)
-
-            processRestOfPage(groupList)
+        findViewById<Button>(R.id.addButton).setOnClickListener{
+            val intent = Intent(this,AddItemActivity::class.java)
+            startActivity(intent)
         }
+
+        ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val itemToDelete = viewModel.groupItems.value?.get(viewHolder.adapterPosition)?.item
+                itemToDelete?.let {viewModel.deleteItemIfValid(groupIdentifier,it,username)}
+            }
+        }).attachToRecyclerView(recyclerView)
+
+
     }
 }

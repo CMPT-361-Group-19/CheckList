@@ -1,21 +1,77 @@
 package com.example.checklist
 
 import android.util.Log
-import com.example.checklist.Database.Group
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.checklist.viewmodel.ChecklistItem
 import com.google.firebase.Firebase
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.IgnoreExtraProperties
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
-import com.google.firebase.database.getValue
-import kotlinx.coroutines.flow.callbackFlow
+import com.google.firebase.database.values
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class Database {
     private lateinit var database : DatabaseReference
+    private val _groupItems = MutableLiveData<ArrayList<ChecklistItem>>().apply {
+        value = ArrayList()
+    }
+    val groupItems get() = _groupItems
+
+    private val groupItemListener = object: ChildEventListener{
+        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+            val list = _groupItems.value
+            val task = snapshot.key.toString()
+            val isChecked = snapshot.child("checked").value
+            val username = snapshot.child("username").value
+            val checklistItem = ChecklistItem(task,isChecked.toString(),username.toString())
+            Log.d("look", "onChildAdded before: $list")
+            list?.add(checklistItem)
+            Log.d("look", "onChildAdded after: $list")
+            _groupItems.value = list
+        }
+
+        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            val list = _groupItems.value
+            val task = snapshot.key.toString()
+            val isChecked = snapshot.child("checked").value
+            val username = snapshot.child("username").value
+            val checklistItem = ChecklistItem(task,isChecked.toString(),username.toString())
+            Log.d("look", "onChildChangedBefore: $list")
+            val foundItem = list?.find { it.item == checklistItem.item }
+            foundItem?.let{it.isChecked = checklistItem.isChecked}
+            Log.d("look", "onChildChanged after: $list")
+            _groupItems.value = list
+        }
+
+        override fun onChildRemoved(snapshot: DataSnapshot) {
+            val list = _groupItems.value
+            Log.d("look", "onChildRemoved before: $list")
+            val task = snapshot.key.toString()
+            val isChecked = snapshot.child("checked").value
+            val username = snapshot.child("username").value
+            val checklistItem = ChecklistItem(task,isChecked.toString(),username.toString())
+            list?.remove(checklistItem)
+            Log.d("look", "onChildRemoved after: $list")
+            _groupItems.value = list
+        }
+
+        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.d("look", "loadPost:onCancelled", error.toException())
+
+        }
+
+    }
+
 
     @IgnoreExtraProperties
     data class Account(val username : String? = null, val password : String?) {
@@ -40,7 +96,6 @@ class Database {
             val account = snapshot.getValue(Account::class.java)
             if (account != null) {
                 if (account.username == username) {
-
                     return account
                 }
             }
@@ -101,8 +156,6 @@ class Database {
 
 
 
-
-
     //return the list of groups in the database
     suspend fun getGroupList() : ArrayList<Group> {
         var groupList:ArrayList<Group> = ArrayList<Group>()
@@ -154,7 +207,6 @@ class Database {
 
     //returns an arraylist of Strings that contains usernames of the participants of a particular group
     suspend fun getGroupParticipants(groupId: String) : ArrayList<String> {
-
         var participantList: ArrayList<String> = ArrayList<String>()
         database = Firebase.database.reference
         val dataSnapshot = database.child("groups").child(groupId).child("participants").get().await()
@@ -166,5 +218,39 @@ class Database {
         }
         return participantList
     }
+
+    suspend fun addGroupItems(groupId: String, checklistItem: ChecklistItem) {
+        withContext(Dispatchers.IO) {
+            database = Firebase.database.reference
+                database.child("groups").child(groupId).child("items").child(checklistItem.item)
+                    .setValue(checklistItem)
+        }
+    }
+
+
+    fun attachGroupItemListener(groupId: String){
+        database = Firebase.database.reference
+        database.child("groups").child(groupId).child("items").addChildEventListener(groupItemListener)
+
+    }
+
+    fun changeItemStatus(groupId: String, item: String, username: String, isChecked:Boolean) {
+        database = Firebase.database.reference
+        database.child("groups").child(groupId).child("items").child(item).child("checked").setValue(isChecked)
+
+    }
+
+    suspend fun deleteItemIfValidUser(groupId: String, item: String, username: String): Boolean{
+        database = Firebase.database.reference
+        val snapShot = database.child("groups").child(groupId).child("items").child(item).child("username").get().await()
+        if(snapShot.value.toString() == username){
+            Log.d("look", "removing val $item $username")
+            snapShot.ref.parent?.removeValue()
+            return true
+        }
+        Log.d("look", "removed val $item $username")
+        return false
+    }
+
 
 }
