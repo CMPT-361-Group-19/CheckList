@@ -184,6 +184,27 @@ class Database {
 
     }
 
+    fun getGroupsWithUser(user: String) : ArrayList<String> {
+        database = Firebase.database.reference
+
+        var groupList = arrayListOf<String>()
+        var groupName = ""
+
+        database.child("groups").get().addOnSuccessListener() {
+            for (thing in it.children) {
+                if (thing.child("participants").hasChild(user)) {
+                    Log.d("groupID:", "${thing.getValue(Group::class.java)!!.groupId}")
+                    groupName = thing.getValue(Group::class.java)!!.groupId!!
+                    groupList.add(groupName)
+                }
+            }
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting group data", it)
+        }
+
+        return groupList
+    }
+
     //returns an arraylist of Strings that contains usernames of the participants of a particular group
     suspend fun getGroupParticipants(groupId: String) : ArrayList<String> {
         var participantList: ArrayList<String> = ArrayList<String>()
@@ -230,5 +251,6 @@ class Database {
         Log.d("look", "removed val $item $username")
         return false
     }
-    
+
+
 }

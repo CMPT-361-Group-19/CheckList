@@ -12,6 +12,8 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="create_account"><u>Create Account</u></string>
+    <string name="new_group"><u><b>Join an Existing Group</b></u></string>
+    <string name="create_group"><u><b>Create your own Group</b></u></string>
 
     <string name="apiKey">AIzaSyCptop7KgWFY9t9wAUpWhAGF5HvPEBEP2E</string>
 </resources>

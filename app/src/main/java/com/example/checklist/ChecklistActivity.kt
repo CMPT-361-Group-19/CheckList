@@ -16,7 +16,7 @@ import com.example.checklist.viewmodel.ChecklistViewModel
 class ChecklistActivity : AppCompatActivity() {
     private val tag = "ChecklistActivity"
 //    private lateinit var groupIdentifier: String
-    private val groupIdentifier: String = "Bakers"
+    private var groupIdentifier: String = "Bakers"
 
     private lateinit var viewModel: ChecklistViewModel
     private lateinit var username: String
@@ -24,6 +24,8 @@ class ChecklistActivity : AppCompatActivity() {
         Log.d(tag," inside checklist")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checklist)
+
+        groupIdentifier = intent.getStringExtra("group identifier").toString()
 
         findViewById<TextView>(R.id.groupName).text = groupIdentifier
 
