@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.checklist.viewmodel.ChecklistItem
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Firebase
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -184,6 +185,27 @@ class Database {
 
     }
 
+    fun getGroupsWithUser(user: String) : ArrayList<String> {
+        database = Firebase.database.reference
+
+        var groupList = arrayListOf<String>()
+        var groupName = ""
+
+        database.child("groups").get().addOnSuccessListener() {
+            for (thing in it.children) {
+                if (thing.child("participants").hasChild(user)) {
+                    Log.d("groupID:", "${thing.getValue(Group::class.java)!!.groupId}")
+                    groupName = thing.getValue(Group::class.java)!!.groupId!!
+                    groupList.add(groupName)
+                }
+            }
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting group data", it)
+        }
+
+        return groupList
+    }
+
     //returns an arraylist of Strings that contains usernames of the participants of a particular group
     suspend fun getGroupParticipants(groupId: String) : ArrayList<String> {
         var participantList: ArrayList<String> = ArrayList<String>()
@@ -232,12 +254,18 @@ class Database {
     }
 
     // extracting details about a certain item added to checklist.
-    suspend fun getGroupItemDetails(groupId: String, itemName: String, username: String): ChecklistItem? {
+    suspend fun getGroupItemDetails(groupId: String, itemName: String, username: String): ChecklistItem {
         database = Firebase.database.reference
         val dataSnapshot = database.child("groups").child(groupId).child("items").child(itemName).get().await()
-        val item = dataSnapshot.getValue(ChecklistItem::class.java)
+        Log.d("inside here","inside getGroupItems ${dataSnapshot.value}")
+        val adderName = dataSnapshot.child("username").value.toString()
+        val lat = dataSnapshot.child("selectedPlace").child("location").child("latitude").value.toString()
+        val long = dataSnapshot.child("selectedPlace").child("location").child("longitude").value.toString()
+
+//        val item = dataSnapshot.getValue(ChecklistItem::class.java)
+        val item = ChecklistItem(itemName, isChecked = "false",username=adderName, selectedPlace =SelectedPlace(location = LatLng(lat.toDouble(),long.toDouble())))
+        Log.d("inside here", "in the db $item")
         return item
     }
 
-    
 }

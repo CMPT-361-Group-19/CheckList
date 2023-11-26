@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/joinGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner_view_grey">
+
+            <TextView
+                android:id="@+id/joinHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_group"
+                android:textSize="25sp"
+                android:textColor="@color/navy_blue"
+                android:layout_centerHorizontal="true"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/joinHeader"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/inputJoinGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:layout_below="@id/joinHeader"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/square_color_view_navy_white"
+                    android:hint="Enter Group ID"/>
+
+                <Button
+                    android:id="@+id/buttonJoinGroup"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_add_group"
+                    android:text="Add"/>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner_view_grey"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/newGroupHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_group"
+                android:textSize="25sp"
+                android:textColor="@color/navy_blue"
+                android:layout_centerHorizontal="true"/>
+
+            <LinearLayout
+                android:id="@+id/groupName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/newGroupHeader"
+                android:padding="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textColor="@color/navy_blue"
+                    android:text="Group Name:"
+                    android:gravity="center_horizontal"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/inputGroupName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:layout_weight="2"
+                    android:padding="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/square_color_view_navy_white"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:hint="Group Name"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/groupDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/groupName"
+                android:padding="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textColor="@color/navy_blue"
+                    android:text="Group Description"
+                    android:gravity="center"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/inputGroupDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_weight="2"
+                    android:padding="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/square_color_view_navy_white"
+                    android:gravity="top|start"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLength="2000"
+                    android:hint="Group Description"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="bottom"
+                android:layout_below="@+id/groupDesc"
+                android:padding="10dp">
+
+                <Button
+                    android:id="@+id/buttonCreateGroup"
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_add_group"
+                    android:text="Create Group"
+                    android:layout_marginRight="10dp"/>
+
+                <Button
+                    android:id="@+id/buttonCancelGroup"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_delete_group"
+                    android:text="Cancel"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

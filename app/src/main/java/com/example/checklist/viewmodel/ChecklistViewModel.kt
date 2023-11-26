@@ -59,8 +59,13 @@ class ChecklistViewModel(): ViewModel() {
     fun getItemDetails(groupId: String, itemName: String, username: String){
         viewModelScope.launch{
             try{
+                Log.d("inside here","inside here")
                 val itemDetails = database.getGroupItemDetails(groupId, itemName, username)
-                _itemDetails.postValue(ChecklistItem(itemName, itemDetails?.isChecked ?: "",username, itemDetails?.selectedPlace))
+                Log.d("inside here", "in vm selectedPlace: ${itemDetails?.selectedPlace}")
+//                _itemDetails.postValue(ChecklistItem(itemName, itemDetails?.isChecked ?: "",username, itemDetails?.selectedPlace))
+                _itemDetails.value = itemDetails
+                Log.d("inside here", "in vm ${_itemDetails.value}}")
+
             } catch(e: Exception){
                 Log.d(tag, "error getting item details")}
         }

@@ -22,7 +22,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 class AddItemActivity : AppCompatActivity() {
     private val tag = "AddItemActivity"
     private lateinit var viewModel: AddItemViewModel
-    private val groupIdentifier: String = "Bakers"
+    private var groupIdentifier: String = "Bakers"
     private val selectedPlace: SelectedPlace = SelectedPlace()
     private lateinit var username: String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +35,8 @@ class AddItemActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(false)
+
+        groupIdentifier = intent.getStringExtra("groupId").toString()
 
 
         val apiKey = getString(R.string.apiKey)

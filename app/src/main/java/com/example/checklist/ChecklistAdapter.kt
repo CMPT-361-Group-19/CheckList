@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +38,7 @@ class ChecklistAdapter(
             checkBox = view.findViewById(R.id.checkBox)
 
             itemText.setOnClickListener{
+                Log.d("look", "going to info activity")
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val item = dataSet?.get(position)
@@ -45,10 +47,9 @@ class ChecklistAdapter(
             }
             checkBox.setOnCheckedChangeListener{buttonView, isChecked ->
             Log.d(tag, "look unchecked/checked ${checkBox.text} $isChecked")
-
                 viewModel.changeItemStatus(groupIdentifier, checkBox.text.toString(), username, isChecked)
-
             }
+
         }
     }
 
@@ -68,7 +69,6 @@ class ChecklistAdapter(
         val item = dataSet?.get(position)
         holder.checkBox.text = dataSet?.get(position)?.item ?: "Empty"
         holder.checkBox.isChecked = dataSet?.get(position)?.isChecked.toBoolean()
-
     }
 
     fun updateDataset(list: ArrayList<ChecklistItem>){
