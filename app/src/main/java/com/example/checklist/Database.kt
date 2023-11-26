@@ -230,5 +230,14 @@ class Database {
         Log.d("look", "removed val $item $username")
         return false
     }
+
+    // extracting details about a certain item added to checklist.
+    suspend fun getGroupItemDetails(groupId: String, itemName: String, username: String): ChecklistItem? {
+        database = Firebase.database.reference
+        val dataSnapshot = database.child("groups").child(groupId).child("items").child(itemName).get().await()
+        val item = dataSnapshot.getValue(ChecklistItem::class.java)
+        return item
+    }
+
     
 }
