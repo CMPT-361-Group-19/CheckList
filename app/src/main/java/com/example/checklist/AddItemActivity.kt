@@ -18,6 +18,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AddItemActivity : AppCompatActivity() {
     private val tag = "AddItemActivity"
@@ -25,6 +26,7 @@ class AddItemActivity : AppCompatActivity() {
     private var groupIdentifier: String = "Bakers"
     private val selectedPlace: SelectedPlace = SelectedPlace()
     private lateinit var username: String
+    private lateinit var bottomNavigationView: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_item)
@@ -35,6 +37,23 @@ class AddItemActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(false)
+        //Navigation to other activities
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.group -> {
+                    val intent = Intent(this,NewGroupActivity::class.java)
+                    intent.putExtra("user", username)
+                    startActivity(intent)
+                    true
+                }
+                R.id.home -> {
+                    // Already in Home, do nothing or refresh if needed
+                    true
+                }
+                else -> false
+            }
+        }
 
         groupIdentifier = intent.getStringExtra("groupId").toString()
 
