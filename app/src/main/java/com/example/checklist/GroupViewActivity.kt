@@ -26,7 +26,8 @@ class GroupViewActivity : AppCompatActivity() {
 
         database = Database()
         username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
-
+        val serviceIntent = Intent(this, LocationService::class.java)
+        startForegroundService(serviceIntent)
         //Navigating between Activities
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnItemSelectedListener { item ->

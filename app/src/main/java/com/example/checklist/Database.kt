@@ -268,4 +268,58 @@ class Database {
         return item
     }
 
+    suspend fun getUserGroupList(username: String): ArrayList<String>{
+        database = Firebase.database.reference
+        var groupList: ArrayList<String> = ArrayList()
+        val dataSnapshot = database.child("accounts").child(username).child("groupList").get().await()
+        for (snapshot in dataSnapshot.children) {
+            val item = snapshot.getValue(String::class.java)
+            if (item != null) {
+                groupList.add(item)
+            }
+            //Log.i("loca", "${item}")
+        }
+
+        return groupList
+    }
+
+    //data class ItemList(var groupId: String? = null,var itemName: String? = null, var lat: Double? = null, var long: Double? = null)
+    suspend fun getUserItemList(username: String, groupList:ArrayList<String>): ArrayList<ArrayList<String>>{
+        database = Firebase.database.reference
+        //val groupList = getUserGroupList(username)
+        var itemList: ArrayList<ArrayList<String>> = ArrayList()
+        for (group in groupList) {
+            val dataSnapshot = database.child("groups").child(group).child("items").get().await()
+            for (snapshot in dataSnapshot.children) {
+                //snapshot.getValue<ChecklistItem>()
+                //snapshot.childrenCount
+                Log.i("loca", snapshot.key.toString())
+                //snapshot.key.toString()
+                var groups = ArrayList<String>()
+                //add item name
+                groups.add(group)
+                groups.add(snapshot.key.toString())
+                val long = database.child("groups").child(group).child("items")
+                    .child(snapshot.key.toString()).child("selectedPlace")
+                    .child("location").child("longitude").get().await()
+
+                val lat = database.child("groups").child(group).child("items")
+                    .child(snapshot.key.toString()).child("selectedPlace")
+                    .child("location").child("latitude").get().await()
+                groups.add(2, long.getValue(Double::class.java).toString())
+                groups.add(3,lat.getValue(Double::class.java).toString())
+
+
+                itemList.add(groups)
+
+
+            }
+
+
+        }
+
+
+        return itemList
+    }
+
 }
