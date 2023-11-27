@@ -1,5 +1,4 @@
 package com.example.checklist
-
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -37,9 +36,19 @@ class ChecklistActivity : AppCompatActivity() {
         val dataset: ArrayList<ChecklistItem>? = viewModel.groupItems.value
 
         val checkListAdapter = ChecklistAdapter(dataset,viewModel,groupIdentifier,username)
-
         val recyclerView: RecyclerView = findViewById(R.id.checklist_recycler_view)
         recyclerView.adapter = checkListAdapter
+
+        checkListAdapter.onItemClickListener = {item ->
+            Log.d("ChecklistActivity","Item clicked: ${item.item}")
+            val intent = Intent(this@ChecklistActivity,ItemDetailsActivity::class.java)
+            intent.putExtra("itemName",item.item)
+            intent.putExtra("itemUser",username)
+            intent.putExtra("itemLocation",item.selectedPlace?.location)
+            intent.putExtra("groupId",groupIdentifier)
+            startActivity(intent)
+        }
+
         recyclerView.layoutManager = LinearLayoutManager(this);
         Log.d(tag," inside checklist2 ${viewModel.groupItems.value}")
 
@@ -52,6 +61,7 @@ class ChecklistActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.addButton).setOnClickListener{
             val intent = Intent(this,AddItemActivity::class.java)
+            intent.putExtra("groupId",groupIdentifier)
             startActivity(intent)
         }
 

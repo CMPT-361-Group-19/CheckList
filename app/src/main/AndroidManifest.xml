@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,10 +14,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CheckList"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCptop7KgWFY9t9wAUpWhAGF5HvPEBEP2E" />
+        <activity
+            android:name=".ItemDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".AddItemActivity"
-            android:theme="@style/Theme.CheckList"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.CheckList" />
         <activity
             android:name=".NewGroupActivity"
             android:exported="false"/>

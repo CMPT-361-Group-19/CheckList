@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.checklist.viewmodel.ChecklistItem
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Firebase
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -252,5 +253,19 @@ class Database {
         return false
     }
 
+    // extracting details about a certain item added to checklist.
+    suspend fun getGroupItemDetails(groupId: String, itemName: String, username: String): ChecklistItem {
+        database = Firebase.database.reference
+        val dataSnapshot = database.child("groups").child(groupId).child("items").child(itemName).get().await()
+        Log.d("inside here","inside getGroupItems ${dataSnapshot.value}")
+        val adderName = dataSnapshot.child("username").value.toString()
+        val lat = dataSnapshot.child("selectedPlace").child("location").child("latitude").value.toString()
+        val long = dataSnapshot.child("selectedPlace").child("location").child("longitude").value.toString()
+
+//        val item = dataSnapshot.getValue(ChecklistItem::class.java)
+        val item = ChecklistItem(itemName, isChecked = "false",username=adderName, selectedPlace =SelectedPlace(location = LatLng(lat.toDouble(),long.toDouble())))
+        Log.d("inside here", "in the db $item")
+        return item
+    }
 
 }

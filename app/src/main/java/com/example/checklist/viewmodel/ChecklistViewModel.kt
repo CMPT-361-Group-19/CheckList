@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.checklist.Database
@@ -15,6 +16,8 @@ import kotlinx.coroutines.launch
 class ChecklistViewModel(): ViewModel() {
     private val tag = "ChecklistViewModel"
     private val database = Database()
+    private val _itemDetails = MutableLiveData<ChecklistItem>()
+    val itemDetails: LiveData<ChecklistItem> get() = _itemDetails
     val groupItems get() = database.groupItems
 
     fun getGroupItems(groupId: String) {
@@ -50,6 +53,21 @@ class ChecklistViewModel(): ViewModel() {
                 Log.d(tag, "not deleted")
 
             }
+        }
+    }
+
+    fun getItemDetails(groupId: String, itemName: String, username: String){
+        viewModelScope.launch{
+            try{
+                Log.d("inside here","inside here")
+                val itemDetails = database.getGroupItemDetails(groupId, itemName, username)
+                Log.d("inside here", "in vm selectedPlace: ${itemDetails?.selectedPlace}")
+//                _itemDetails.postValue(ChecklistItem(itemName, itemDetails?.isChecked ?: "",username, itemDetails?.selectedPlace))
+                _itemDetails.value = itemDetails
+                Log.d("inside here", "in vm ${_itemDetails.value}}")
+
+            } catch(e: Exception){
+                Log.d(tag, "error getting item details")}
         }
     }
 }
