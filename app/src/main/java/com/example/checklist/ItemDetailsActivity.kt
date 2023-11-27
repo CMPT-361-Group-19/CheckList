@@ -60,7 +60,7 @@ class ItemDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("ItemDetailsActivity","$itemLocation")
         itemLocation?.let {
             mMap.addMarker(MarkerOptions().position(it).title("Item Location"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(it))
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 15.0f))
         }
         getItemDetails()
     }
@@ -78,7 +78,7 @@ class ItemDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.d("inside here", "location is $itemLocation")
                 mMap.clear()
                 mMap.addMarker(MarkerOptions().position(it).title("Item Location"))
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(it))
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 15.0f))
             }
         }
     }
