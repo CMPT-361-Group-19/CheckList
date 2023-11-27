@@ -1,5 +1,6 @@
 package com.example.checklist
 
+import android.content.ClipData.Item
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.database
+import com.google.firebase.database.getValue
 import com.google.firebase.database.values
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -179,6 +181,7 @@ class Database {
         val group = groupId?.let {
             if (username != null) {
                 database.child("groups").child(it).child("participants").child(username).setValue(username)
+                database.child("accounts").child(username).child("groupList").child(groupId).setValue(groupId)
             }
         }
 
@@ -250,6 +253,43 @@ class Database {
         }
         Log.d("look", "removed val $item $username")
         return false
+    }
+
+    suspend fun getUserGroupList(username: String): ArrayList<String>{
+        database = Firebase.database.reference
+        var groupList: ArrayList<String> = ArrayList()
+        val dataSnapshot = database.child("accounts").child(username).child("groupList").get().await()
+        for (snapshot in dataSnapshot.children) {
+            val item = snapshot.getValue(String::class.java)
+            if (item != null) {
+                groupList.add(item)
+            }
+            //Log.i("loca", "${item}")
+        }
+
+            return groupList
+    }
+
+    //data class ItemList(var groupId: String? = null,var itemName: String? = null, var lat: Double? = null, var long: Double? = null)
+    suspend fun getUserItemList(username: String, groupList:ArrayList<String>): ArrayList<ArrayList<String>>{
+        database = Firebase.database.reference
+        //val groupList = getUserGroupList(username)
+        var itemList: ArrayList<ArrayList<String>> = ArrayList()
+        for (group in groupList) {
+            val dataSnapshot = database.child("groups").child(group).child("items").get().await()
+            for (snapshot in dataSnapshot.children) {
+                //snapshot.getValue<ChecklistItem>()
+                //snapshot.childrenCount
+                //Log.i("loca","${snapshot.childrenCount}")
+
+
+            }
+
+
+        }
+
+
+        return itemList
     }
 
 

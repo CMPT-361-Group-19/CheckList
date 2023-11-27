@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.GridView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.checklist.ui.home.GridviewAdapter
 import kotlinx.coroutines.launch
@@ -25,6 +26,11 @@ class GroupViewActivity : AppCompatActivity() {
 
         database = Database()
         username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
+        val serviceIntent = Intent(this, LocationService::class.java)
+        startForegroundService(serviceIntent)
+        //val locationService = LocationService()
+        //locationService.onStartCommand(serviceIntent,0,1234)
+
     }
 
     private fun processRestOfPage(groupList : ArrayList<String>) {
@@ -58,7 +64,6 @@ class GroupViewActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         Log.d("debug", "OnResume")
 
         lifecycleScope.launch {
