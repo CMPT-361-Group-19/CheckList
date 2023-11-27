@@ -280,7 +280,24 @@ class Database {
             for (snapshot in dataSnapshot.children) {
                 //snapshot.getValue<ChecklistItem>()
                 //snapshot.childrenCount
-                //Log.i("loca","${snapshot.childrenCount}")
+                Log.i("loca", snapshot.key.toString())
+                //snapshot.key.toString()
+                var groups = ArrayList<String>()
+                //add item name
+                groups.add(group)
+                groups.add(snapshot.key.toString())
+                val long = database.child("groups").child(group).child("items")
+                    .child(snapshot.key.toString()).child("selectedPlace")
+                    .child("location").child("longitude").get().await()
+
+                val lat = database.child("groups").child(group).child("items")
+                    .child(snapshot.key.toString()).child("selectedPlace")
+                    .child("location").child("latitude").get().await()
+                groups.add(2, long.getValue(Double::class.java).toString())
+                groups.add(3,lat.getValue(Double::class.java).toString())
+
+
+                itemList.add(groups)
 
 
             }

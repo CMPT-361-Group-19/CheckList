@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.app.Service.START_NOT_STICKY
 import android.content.Context
@@ -18,11 +19,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.os.Vibrator
 import android.provider.ContactsContract.Data
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -33,7 +36,7 @@ import kotlinx.coroutines.Job
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import java.lang.Math.abs
 
 
 class LocationService : Service(), LocationListener {
@@ -42,6 +45,8 @@ class LocationService : Service(), LocationListener {
     private val serviceJob = Job()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
     private var userItemList: ArrayList<ArrayList<String>>? = null
+    private var itemFlag: String? = null
+
     override fun onCreate() {
         super.onCreate()
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -62,7 +67,7 @@ class LocationService : Service(), LocationListener {
                 //get list of items of each group that user is in
                 //?????
                 userItemList = database.getUserItemList(username,groupList)
-                //Log.i("locationlog","${groupList.get(0)}")
+                Log.i("itemslist","${userItemList!!.get(0).get(1)}")
             }
         }
         startForegroundService()
@@ -75,23 +80,68 @@ class LocationService : Service(), LocationListener {
         //check grouplist of user and for each group check each tasks location if any
         Log.i("locationlog","lat: $lat, long: $long")
 
-        //if task location nearby
-        val taskLocationNearby:Boolean = true
-        if (taskLocationNearby) {
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            val builder = NotificationCompat.Builder(this, "notif")
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle("group Y")
-                .setContentText("Task item X is nearby")
-                .build()
+        if (userItemList != null) {
+            //Log.i("flag","nullled")
+            for (item in userItemList!!) {
+            //if task item location near current location
+            if (abs(item.get(2).toDouble()-long) <= 0.02 ) {
+                if (abs(item.get(3).toDouble()-lat) <= 0.02 ) {
+                    //create notification
+                    // Create an explicit intent for an Activity in your app.
+                    val intent = Intent(this, GroupViewActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    val builder = NotificationCompat.Builder(baseContext, "notif")
+                        .setSmallIcon(R.drawable.group_chat)
+                        .setContentTitle("Group: ${item.get(0)}")
+                        .setContentText("Task item ${item.get(1)} is nearby")
+                        .setContentIntent(pendingIntent)
+                        //.setAutoCancel(true)
 
-            val channel = NotificationChannel(
-                "notif",
-                "Task proximity Alert",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
+
+                    val channel = NotificationChannel(
+                        "notif",
+                        "Task proximity Alert",
+                        NotificationManager.IMPORTANCE_HIGH
+                    ).apply {  }
+                    notificationManager.createNotificationChannel(channel)
+                    with(NotificationManagerCompat.from(this)) {
+                        // notificationId is a unique int for each notification that you must define.
+                        if (ActivityCompat.checkSelfPermission(
+                                 baseContext,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            return
+                        }
+                        if (itemFlag != item.get(1)) {
+                            notify(1234, builder.build())
+                            // Check if the device supports vibration
+                            val vibrator: Vibrator? = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+
+                            // Check if the vibrator service is available
+                            if (vibrator?.hasVibrator() == true) {
+                                // Vibrate for 500 milliseconds
+                                vibrator.vibrate(500)
+                        }
+                        itemFlag = item.get(1)
+                    }
+
+
+                    }
+
+
+                }
+
+
+            }
         }
+
+
+        }
+
 
     }
 
@@ -107,7 +157,7 @@ class LocationService : Service(), LocationListener {
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("Location Service")
             .setContentText("Tracking location")
-            .setSmallIcon(R.drawable.ic_notification)
+            .setSmallIcon(R.drawable.group_chat)
             .build()
 
         createNotificationChannel(channelId)
