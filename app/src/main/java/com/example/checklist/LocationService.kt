@@ -126,8 +126,9 @@ class LocationService : Service(), LocationListener {
                                 // Vibrate for 500 milliseconds
                                 vibrator.vibrate(500)
                         }
-                        itemFlag = item.get(1)
+
                     }
+                        itemFlag = item.get(1)
 
 
                     }
