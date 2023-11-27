@@ -12,9 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.checklist.viewmodel.ChecklistItem
 import com.example.checklist.viewmodel.ChecklistViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ChecklistActivity : AppCompatActivity() {
     private val tag = "ChecklistActivity"
+    private lateinit var bottomNavigationView: BottomNavigationView
 //    private lateinit var groupIdentifier: String
     private var groupIdentifier: String = "Bakers"
 
@@ -24,6 +26,23 @@ class ChecklistActivity : AppCompatActivity() {
         Log.d(tag," inside checklist")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checklist)
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.group -> {
+                    val intent = Intent(this,NewGroupActivity::class.java)
+                    intent.putExtra("user", username)
+                    startActivity(intent)
+                    true
+                }
+                R.id.home -> {
+                    startActivity(Intent(this@ChecklistActivity, GroupViewActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+
 
         groupIdentifier = intent.getStringExtra("group identifier").toString()
 

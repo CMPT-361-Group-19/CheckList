@@ -49,4 +49,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_centerHorizontal="true"
         android:gravity="center"/>
+
+        <include layout="@layout/navigation_drawer" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
