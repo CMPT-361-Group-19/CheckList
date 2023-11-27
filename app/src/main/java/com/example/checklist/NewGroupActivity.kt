@@ -1,21 +1,41 @@
 package com.example.checklist
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
 class NewGroupActivity : AppCompatActivity() {
 
     private lateinit var username : String
     private lateinit var database: Database
+    private lateinit var bottomNavigationView: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_new_group)
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    startActivity(Intent(this@NewGroupActivity, GroupViewActivity::class.java))
+                    true
+                }
+                R.id.group -> {
+                    // Already in group, do nothing or refresh if needed
+                    true
+                }
+
+                else -> false
+            }
+        }
+
 
         database = Database()
         username = intent.getStringExtra("user")!!

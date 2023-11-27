@@ -1,5 +1,6 @@
 package com.example.checklist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,31 +18,54 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AddItemActivity : AppCompatActivity() {
     private val tag = "AddItemActivity"
     private lateinit var viewModel: AddItemViewModel
-    private val groupIdentifier: String = "Bakers"
+    private var groupIdentifier: String = "Bakers"
     private val selectedPlace: SelectedPlace = SelectedPlace()
     private lateinit var username: String
+    private lateinit var bottomNavigationView: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_item)
 
-        username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
+        username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username", "empty")
+            .toString()
         viewModel = ViewModelProvider(this)[AddItemViewModel::class.java]
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(false)
+        //Navigation to other activities
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.group -> {
+                    val intent = Intent(this,NewGroupActivity::class.java)
+                    intent.putExtra("user", username)
+                    startActivity(intent)
+                    true
+                }
+                R.id.home -> {
+                    // Already in Home, do nothing or refresh if needed
+                    true
+                }
+                else -> false
+            }
+        }
+
+        groupIdentifier = intent.getStringExtra("groupId").toString()
 
 
         val apiKey = getString(R.string.apiKey)
-        if(!Places.isInitialized()){
+        if (!Places.isInitialized()) {
             Places.initialize(applicationContext, apiKey)
         }
 
 
-        val placesAPIFragment = supportFragmentManager.findFragmentById(R.id.placesAPI) as AutocompleteSupportFragment
+        val placesAPIFragment =
+            supportFragmentManager.findFragmentById(R.id.placesAPI) as AutocompleteSupportFragment
 
         onLocationSelected(placesAPIFragment)
 
@@ -57,7 +81,7 @@ class AddItemActivity : AppCompatActivity() {
         return true
     }
 
-    private fun onLocationSelected(placesAPIFragment: AutocompleteSupportFragment){
+    private fun onLocationSelected(placesAPIFragment: AutocompleteSupportFragment) {
         placesAPIFragment.setPlaceFields(
             listOf(
                 Place.Field.NAME,
@@ -70,7 +94,7 @@ class AddItemActivity : AppCompatActivity() {
             )
         )
 
-        placesAPIFragment.setOnPlaceSelectedListener(object: PlaceSelectionListener {
+        placesAPIFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
 
                 val name = place.name
@@ -90,24 +114,24 @@ class AddItemActivity : AppCompatActivity() {
             }
 
             override fun onError(p0: Status) {
-                Log.d(tag,"look $p0")
-                Toast.makeText(applicationContext,"Some error occurred", Toast.LENGTH_SHORT).show()
+                Log.d(tag, "look $p0")
+                Toast.makeText(applicationContext, "Some error occurred", Toast.LENGTH_SHORT).show()
             }
 
-})
+        })
 
     }
 
-    private fun saveTaskToDB(){
+    private fun saveTaskToDB() {
         Log.d(tag, "look in save task")
-       val itemName =  findViewById<TextView>(R.id.itemText).text.toString()
-        val checkListItem = ChecklistItem(itemName,false.toString(),username,selectedPlace)
-        if(itemName.isNullOrBlank() || selectedPlace.location == null){
-            Toast.makeText(this,"Fields cannot be null",Toast.LENGTH_SHORT).show()
-        }
-        else {
+        val itemName = findViewById<TextView>(R.id.itemText).text.toString()
+        val checkListItem = ChecklistItem(itemName, false.toString(), username, selectedPlace)
+        if (itemName.isNullOrBlank() || selectedPlace.location == null) {
+            Toast.makeText(this, "Fields cannot be null", Toast.LENGTH_SHORT).show()
+        } else {
             viewModel.saveTask(groupIdentifier, checkListItem)
             finish()
+
         }
     }
 }

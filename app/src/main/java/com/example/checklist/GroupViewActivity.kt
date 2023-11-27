@@ -10,26 +10,40 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.checklist.ui.home.GridviewAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
 class GroupViewActivity : AppCompatActivity() {
 
     private lateinit var database: Database
     private lateinit var username: String
+    private lateinit var bottomNavigationView: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_group_view)
 
-//        val groupIconImg = findViewById<TextView>(R.id.groupIconImage)
-//        val groupname = findViewById<TextView>(R.id.groupName)
-
         database = Database()
         username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
-        val serviceIntent = Intent(this, LocationService::class.java)
-        startForegroundService(serviceIntent)
-        //val locationService = LocationService()
-        //locationService.onStartCommand(serviceIntent,0,1234)
+
+
+        //Navigating between Activities
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.group -> {
+                    val intent = Intent(this,NewGroupActivity::class.java)
+                    intent.putExtra("user", username)
+                    startActivity(intent)
+                    true
+                }
+                R.id.home -> {
+                    // Already in Home, do nothing or refresh if needed
+                    true
+                }
+                else -> false
+            }
+        }
 
     }
 
