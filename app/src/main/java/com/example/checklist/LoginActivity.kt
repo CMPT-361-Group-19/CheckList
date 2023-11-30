@@ -35,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("inside", "you are clicking $isValid")
                 val sharedPreferences = getSharedPreferences("Checklist", MODE_PRIVATE)
                 sharedPreferences.edit().putString("username",usernameField).apply()
+                getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",true)
                 val intent = Intent(this, GroupViewActivity::class.java)
                 startActivity(intent)
             }
