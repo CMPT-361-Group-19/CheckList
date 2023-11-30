@@ -1,11 +1,12 @@
 package com.example.checklist
 
+import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.checklist.viewmodel.ChecklistItem
@@ -27,17 +28,17 @@ class ChecklistAdapter(
                      private val groupIdentifier: String,
                      private val onItemClickListener: ((ChecklistItem) -> Unit)?) : RecyclerView.ViewHolder(view) {
         val checkBox: CheckBox
-        val itemText: TextView
+        private val infoIcon: ImageView
 
         private val tag = "CheckListHolder"
 
 
         init {
             // Define click listener for the ViewHolder's View
-            itemText = view.findViewById(R.id.textViewItem)
+            infoIcon = view.findViewById(R.id.info)
             checkBox = view.findViewById(R.id.checkBox)
 
-            itemText.setOnClickListener{
+            infoIcon.setOnClickListener{
                 Log.d("look", "going to info activity")
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {

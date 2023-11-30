@@ -322,4 +322,12 @@ class Database {
         return itemList
     }
 
+    suspend fun removeUserFromGroup(username: String, groupId: String){
+        withContext(Dispatchers.IO) {
+            database = Firebase.database.reference
+            database.child("groups").child(groupId).child("participants").child(username)
+                .removeValue()
+        }
+    }
+
 }
