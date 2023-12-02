@@ -1,12 +1,19 @@
 package com.example.checklist
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.GridView
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.checklist.ui.home.GridviewAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,8 +33,12 @@ class GroupViewActivity : AppCompatActivity() {
 
         database = Database()
         username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
+
+
+        //starting location tracking
         val serviceIntent = Intent(this, LocationService::class.java)
         startForegroundService(serviceIntent)
+
         //Navigating between Activities
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -89,4 +100,8 @@ class GroupViewActivity : AppCompatActivity() {
             processRestOfPage(groupList)
         }
     }
+
+
+
+
 }
