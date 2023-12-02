@@ -166,7 +166,7 @@ class LocationService : Service(), LocationListener {
             this,
             0,
             stopIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         val channelId = "LocationServiceChannel"
         val notification = NotificationCompat.Builder(this, channelId)
