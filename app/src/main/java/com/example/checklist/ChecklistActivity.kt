@@ -5,13 +5,19 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.checklist.viewmodel.ChecklistItem
 import com.example.checklist.viewmodel.ChecklistViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.time.Duration
 
 class ChecklistActivity : AppCompatActivity() {
     private val tag = "ChecklistActivity"
@@ -19,6 +25,7 @@ class ChecklistActivity : AppCompatActivity() {
 //    private lateinit var groupIdentifier: String
     private var groupIdentifier: String = "Bakers"
 
+    private lateinit var checkListAdapter: ChecklistAdapter
     private lateinit var viewModel: ChecklistViewModel
     private lateinit var username: String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +61,7 @@ class ChecklistActivity : AppCompatActivity() {
         username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
         val dataset: ArrayList<ChecklistItem>? = viewModel.groupItems.value
 
-        val checkListAdapter = ChecklistAdapter(dataset,viewModel,groupIdentifier,username)
+        checkListAdapter = ChecklistAdapter(dataset,viewModel,groupIdentifier,username)
         val recyclerView: RecyclerView = findViewById(R.id.checklist_recycler_view)
         recyclerView.adapter = checkListAdapter
 
@@ -84,6 +91,11 @@ class ChecklistActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        findViewById<Button>(R.id.exitGroup).setOnClickListener {
+            viewModel.exitGroup(username,groupIdentifier)
+            finish()
+        }
+
         ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT){
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -95,10 +107,18 @@ class ChecklistActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val itemToDelete = viewModel.groupItems.value?.get(viewHolder.adapterPosition)?.item
-                itemToDelete?.let {viewModel.deleteItemIfValid(groupIdentifier,it,username)}
+                lifecycleScope.launch {
+                    val isDeleted = itemToDelete?.let {viewModel.deleteItemIfValid(groupIdentifier,it,username)}
+                    if(isDeleted?.await() == true){
+                        Toast.makeText(this@ChecklistActivity,"Deleted entry",Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        Toast.makeText(this@ChecklistActivity,"Ypu cannot delete entries made by other members",Toast.LENGTH_SHORT).show()
+                        viewHolder.adapterPosition.takeIf { it != RecyclerView.NO_POSITION }
+                            ?.let { checkListAdapter.notifyItemChanged(it) }
+                    }
+                }
             }
         }).attachToRecyclerView(recyclerView)
-
-
     }
 }

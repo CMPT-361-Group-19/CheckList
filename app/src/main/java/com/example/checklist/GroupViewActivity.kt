@@ -20,9 +20,13 @@ class GroupViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val isLoggedIn = getSharedPreferences("Checklist", MODE_PRIVATE).getBoolean("loggedIn",false)
+        if(isLoggedIn){
+            val intent = Intent(this,LoginActivity::class.java)
+            startActivity(intent)
+        }
+
         setContentView(R.layout.activity_group_view)
-//        val groupIconImg = findViewById<TextView>(R.id.groupIconImage)
-//        val groupname = findViewById<TextView>(R.id.groupName)
 
         database = Database()
         username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
@@ -45,6 +49,7 @@ class GroupViewActivity : AppCompatActivity() {
                 else -> false
             }
         }
+        findViewById<Button>(R.id.logoutButton).setOnClickListener { logout() }
     }
 
     private fun processRestOfPage(groupList : ArrayList<String>) {
@@ -84,9 +89,22 @@ class GroupViewActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val groupList = database.getGroupsWithUser(username)
 
-            kotlinx.coroutines.delay(200)
+            kotlinx.coroutines.delay(400)
 
             processRestOfPage(groupList)
         }
     }
+
+
+
+
+
+    private fun logout(){
+        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false)
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+
+    }
+
+
 }
