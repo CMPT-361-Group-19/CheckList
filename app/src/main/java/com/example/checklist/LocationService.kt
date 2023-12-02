@@ -66,7 +66,7 @@ class LocationService : Service(), LocationListener {
                 //get list of items of each group that user is in
                 //?????
                 userItemList = database.getUserItemList(username,groupList)
-                Log.i("itemslist","${userItemList!!.get(0).get(1)}")
+//                Log.i("itemslist","${userItemList!!.get(0).get(1)}")
             }
         }
 

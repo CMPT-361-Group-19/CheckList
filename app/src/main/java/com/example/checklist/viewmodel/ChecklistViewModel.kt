@@ -11,7 +11,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.checklist.Database
 import com.example.checklist.SelectedPlace
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChecklistViewModel(): ViewModel() {
     private val tag = "ChecklistViewModel"
@@ -43,17 +46,23 @@ class ChecklistViewModel(): ViewModel() {
         }
     }
 
-    fun deleteItemIfValid(groupId: String, item: String, username: String){
+     fun deleteItemIfValid(groupId: String, item: String, username: String): CompletableDeferred<Boolean> {
+        val result = CompletableDeferred<Boolean>()
         viewModelScope.launch {
-            if(database.deleteItemIfValidUser(groupId,item,username)){
-//                Toast.makeText(this@ChecklistViewModel,"Item Deleted",Toast.LENGTH_SHORT).show()
-                Log.d(tag, "deleted")
+            withContext(Dispatchers.IO){
+                if (database.deleteItemIfValidUser(groupId, item, username)) {
+                    // Item deleted
+                    Log.d(tag, "deleted")
+                    result.complete(true)
+                } else {
+                    // Item not deleted
+                    Log.d(tag, "not deleted")
+                    result.complete(false)
                 }
-            else {
-                Log.d(tag, "not deleted")
 
             }
         }
+         return result
     }
 
     fun getItemDetails(groupId: String, itemName: String, username: String){
@@ -68,6 +77,12 @@ class ChecklistViewModel(): ViewModel() {
 
             } catch(e: Exception){
                 Log.d(tag, "error getting item details")}
+        }
+    }
+
+    fun exitGroup(username: String, groupId: String){
+        viewModelScope.launch {
+            database.removeUserFromGroup(username,groupId)
         }
     }
 }
