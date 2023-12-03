@@ -46,9 +46,17 @@ class GroupViewActivity : AppCompatActivity() {
                     // Already in Home, do nothing or refresh if needed
                     true
                 }
+                //for profile button in bottom nav bar
+                R.id.profile -> {
+                    val intent = Intent(this,profile::class.java)
+                    startActivity(intent)
+                    true
+                }
+
                 else -> false
             }
         }
+        bottomNavigationView.selectedItemId = R.id.home
         findViewById<Button>(R.id.logoutButton).setOnClickListener { logout() }
     }
 

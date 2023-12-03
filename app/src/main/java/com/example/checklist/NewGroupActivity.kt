@@ -35,7 +35,7 @@ class NewGroupActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
+        bottomNavigationView.selectedItemId = R.id.group
 
         database = Database()
         username = intent.getStringExtra("user")!!
