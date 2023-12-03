@@ -66,7 +66,7 @@ class LocationService : Service(), LocationListener {
                 //get list of items of each group that user is in
                 //?????
                 userItemList = database.getUserItemList(username,groupList)
-                Log.i("itemslist","${userItemList!!.get(0).get(1)}")
+//                Log.i("itemslist","${userItemList!!.get(0).get(1)}")
             }
         }
 
@@ -177,11 +177,10 @@ class LocationService : Service(), LocationListener {
             .build()
 
         createNotificationChannel(channelId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.FOREGROUND_SERVICE
-            ) != PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.FOREGROUND_SERVICE
+        ) != PackageManager.PERMISSION_GRANTED
         ) {
 
         } else {
