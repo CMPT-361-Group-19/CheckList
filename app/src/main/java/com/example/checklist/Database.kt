@@ -24,6 +24,11 @@ class Database {
     }
     val groupItems get() = _groupItems
 
+    private val _groupList = MutableLiveData<ArrayList<String>>().apply {
+        value = ArrayList()
+    }
+    val groupList get() = _groupList
+
     private val groupItemListener = object: ChildEventListener{
         override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
             val list = _groupItems.value
@@ -185,25 +190,23 @@ class Database {
 
     }
 
-    fun getGroupsWithUser(user: String) : ArrayList<String> {
+    fun getGroupsWithUser(user: String) {
+
         database = Firebase.database.reference
 
-        var groupList = arrayListOf<String>()
-        var groupName = ""
+        var myGroupList = ArrayList<String>()
 
         database.child("groups").get().addOnSuccessListener() {
             for (thing in it.children) {
                 if (thing.child("participants").hasChild(user)) {
                     Log.d("groupID:", "${thing.getValue(Group::class.java)!!.groupId}")
-                    groupName = thing.getValue(Group::class.java)!!.groupId!!
-                    groupList.add(groupName)
+                    myGroupList.add(thing.getValue(Group::class.java)!!.groupId!!)
                 }
             }
+            groupList.value = myGroupList
         }.addOnFailureListener{
             Log.e("firebase", "Error getting group data", it)
         }
-
-        return groupList
     }
 
     //returns an arraylist of Strings that contains usernames of the participants of a particular group

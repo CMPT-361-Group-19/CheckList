@@ -33,7 +33,6 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Math.abs
@@ -70,6 +69,7 @@ class LocationService : Service(), LocationListener {
 //                Log.i("itemslist","${userItemList!!.get(0).get(1)}")
             }
         }
+
         startForegroundService()
     }
 
@@ -81,6 +81,7 @@ class LocationService : Service(), LocationListener {
         Log.i("locationlog","lat: $lat, long: $long")
 
         if (userItemList != null) {
+
             //Log.i("flag","nullled")
             for (item in userItemList!!) {
             //if task item location near current location
@@ -148,25 +149,38 @@ class LocationService : Service(), LocationListener {
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent?.action == "STOP_ACTION") {
+            // Stop or cancel the service when the stop action is clicked
+            //stopForeground(true)
+            stopSelf()
+        }
         startForegroundService()
         return START_NOT_STICKY
     }
 
 
     private fun startForegroundService() {
+        val stopIntent = Intent(this, LocationService::class.java)
+        stopIntent.action = "STOP_ACTION"
+        val pendingStopIntent = PendingIntent.getService(
+            this,
+            0,
+            stopIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val channelId = "LocationServiceChannel"
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("Location Service")
             .setContentText("Tracking location")
             .setSmallIcon(R.drawable.group_chat)
+            .addAction(R.drawable.lock, "Stop Service", pendingStopIntent)
             .build()
 
         createNotificationChannel(channelId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.FOREGROUND_SERVICE
-            ) != PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.FOREGROUND_SERVICE
+        ) != PackageManager.PERMISSION_GRANTED
         ) {
 
         } else {
@@ -174,27 +188,16 @@ class LocationService : Service(), LocationListener {
             startForeground(1234, notification)
         }
 
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
 
-            // Permission is not granted, request it
-            ActivityCompat.requestPermissions(
-                this.baseContext as Activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                0
-            )
-            return
-        }
+            // Permissions are granted, request location updates
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0f, this)
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0f,this)
+        //checkPermissions()
+
+
 
     }
+
 
     private fun createNotificationChannel(channelId: String) {
         val channel = NotificationChannel(
