@@ -98,8 +98,10 @@ class GroupViewActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val groupList = database.getGroupsWithUser(username)
+            kotlinx.coroutines.delay(400)
             processRestOfPage(groupList)
         }
+
     }
 
 
