@@ -132,7 +132,7 @@ class profile: AppCompatActivity() {
 
             }
     private fun logout(){
-        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false)
+        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false).apply()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
 

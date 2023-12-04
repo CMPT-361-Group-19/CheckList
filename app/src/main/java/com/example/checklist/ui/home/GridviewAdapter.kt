@@ -30,10 +30,9 @@ class GridviewAdapter(private val context: Context, private val groupNames:Mutab
             convertView
         }
 
-        val groupIconImg:ImageView = view.findViewById(R.id.groupIconImage)
+//        val groupIconImg:ImageView = view.findViewById(R.id.groupIconImage)
         val groupname: TextView= view.findViewById(R.id.groupName)
 
-        groupIconImg.setImageResource(R.drawable.group_chat)
         groupname.text= groupNames[position]
 
         return view

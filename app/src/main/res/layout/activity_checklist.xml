@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -30,42 +28,110 @@
             android:textStyle="bold"/>
 
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="500dp">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/checklist_recycler_view"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/easyAddEditText"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="Add item"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:inputType="textCapWords"
+                android:maxLines="1"
+                android:imeOptions="actionDone"
+                android:imeActionLabel="Add"
+                android:drawableStart="@drawable/plus_grey"
+                android:drawablePadding="5dp"
+                android:imeActionId="6"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/checklist_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            </LinearLayout>
         </ScrollView>
+    </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="76dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
+    <!-- Add Button -->
+    <LinearLayout
+        android:id="@+id/all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/mainContentLayout"
+        app:layout_constraintEnd_toEndOf="@+id/mainContentLayout">
+    <RelativeLayout
+        android:id="@+id/addButtonContainer"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginRight="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mainContentLayout"
+        app:layout_constraintStart_toStartOf="@+id/mainContentLayout"
+        android:background="@drawable/background"
+        android:layout_marginBottom="5dp">
 
-            <Button
-                android:id="@+id/addButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/rounded_color_view_navy_blue"
-                android:text="ADD" />
+        <ImageView
+            android:id="@+id/addButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/plus_large_svgrepo_com" />
 
-            <Button
-                android:id="@+id/exitGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_color_view_navy_blue"
-                android:text="Exit Group" />
-        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Mic Button -->
+    <RelativeLayout
+        android:id="@+id/micContainer"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginRight="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mainContentLayout"
+        app:layout_constraintStart_toEndOf="@+id/addButtonContainer"
+        android:background="@drawable/background"
+        android:layout_marginBottom="5dp">
+
+        <ImageView
+            android:id="@+id/mic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mic_svgrepo_com"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <!-- Exit Group Button -->
+    <RelativeLayout
+        android:id="@+id/exitGroupContainer"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginRight="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mainContentLayout"
+        app:layout_constraintStart_toEndOf="@+id/micContainer"
+        android:background="@drawable/background"
+        android:layout_marginBottom="5dp">
+
+        <ImageView
+            android:id="@+id/exitGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/exit_svgrepo_com" />
+
+    </RelativeLayout>
     </LinearLayout>
 
     <!-- Navigation Drawer at the bottom -->
@@ -80,5 +146,3 @@
         <include layout="@layout/navigation_drawer"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

@@ -95,7 +95,7 @@ class LocationService : Service(), LocationListener {
                     val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
                     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     val builder = NotificationCompat.Builder(baseContext, "notif")
-                        .setSmallIcon(R.drawable.group_chat)
+                        .setSmallIcon(R.drawable.group_svgrepo_com)
                         .setContentTitle("Group: ${item.get(0)}")
                         .setContentText("Task item ${item.get(1)} is nearby")
                         .setContentIntent(pendingIntent)
@@ -172,7 +172,7 @@ class LocationService : Service(), LocationListener {
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("Location Service")
             .setContentText("Tracking location")
-            .setSmallIcon(R.drawable.group_chat)
+            .setSmallIcon(R.drawable.group_svgrepo_com)
             .addAction(R.drawable.lock, "Stop Service", pendingStopIntent)
             .build()
 

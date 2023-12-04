@@ -29,7 +29,7 @@ class GroupViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val isLoggedIn = getSharedPreferences("Checklist", MODE_PRIVATE).getBoolean("loggedIn",false)
-        if(isLoggedIn){
+        if(!isLoggedIn){
             val intent = Intent(this,LoginActivity::class.java)
             startActivity(intent)
         }
@@ -66,7 +66,6 @@ class GroupViewActivity : AppCompatActivity() {
         }
 
         bottomNavigationView.selectedItemId = R.id.home
-//        findViewById<Button>(R.id.logoutButton).setOnClickListener { logout() }
     }
 
     private fun updateList(groupList : ArrayList<String>) {
@@ -108,7 +107,6 @@ class GroupViewActivity : AppCompatActivity() {
 
         database.groupList.observe(this) {
             updateList(it)
-
         }
 
     }
@@ -212,13 +210,6 @@ class GroupViewActivity : AppCompatActivity() {
         startForegroundService(serviceIntent)
     }
 
-
-//    private fun logout(){
-//        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false)
-//        val intent = Intent(this, LoginActivity::class.java)
-//        startActivity(intent)
-//
-//    }
 
 
 }

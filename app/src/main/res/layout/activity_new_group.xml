@@ -43,6 +43,7 @@
                     android:layout_below="@id/joinHeader"
                     android:padding="10dp"
                     android:layout_marginRight="10dp"
+                    android:backgroundTint="@null"
                     android:background="@drawable/square_color_view_navy_white"
                     android:hint="Enter Group ID"/>
 
@@ -52,6 +53,8 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_add_group"
+                    app:backgroundTint="@null"
+                    android:background="@drawable/rounded_color_view_navy_blue"
                     android:text="Add"/>
 
             </LinearLayout>
@@ -152,9 +155,12 @@
                     android:id="@+id/buttonCreateGroup"
                     android:layout_width="0dp"
                     android:layout_weight="4"
+                    app:backgroundTint="@null"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_add_group"
                     android:text="Create Group"
+                    android:backgroundTint="@null"
+                    android:background="@drawable/rounded_color_view_navy_blue"
                     android:layout_marginRight="10dp"/>
 
                 <Button
@@ -162,6 +168,8 @@
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="wrap_content"
+                    app:backgroundTint="@null"
+                    android:background="@drawable/rounded_color_view_navy_blue"
                     android:drawableEnd="@drawable/ic_delete_group"
                     android:text="Cancel"/>
 

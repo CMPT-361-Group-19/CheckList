@@ -15,6 +15,8 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.util.Locale
 
 class ChecklistViewModel(): ViewModel() {
     private val tag = "ChecklistViewModel"
@@ -65,11 +67,11 @@ class ChecklistViewModel(): ViewModel() {
          return result
     }
 
-    fun getItemDetails(groupId: String, itemName: String, username: String){
+    fun getItemDetails(groupId: String, itemName: String){
         viewModelScope.launch{
             try{
                 Log.d("inside here","inside here")
-                val itemDetails = database.getGroupItemDetails(groupId, itemName, username)
+                val itemDetails = database.getGroupItemDetails(groupId, itemName)
                 Log.d("inside here", "in vm selectedPlace: ${itemDetails?.selectedPlace}")
 //                _itemDetails.postValue(ChecklistItem(itemName, itemDetails?.isChecked ?: "",username, itemDetails?.selectedPlace))
                 _itemDetails.value = itemDetails
@@ -87,4 +89,4 @@ class ChecklistViewModel(): ViewModel() {
     }
 }
 
-data class ChecklistItem(val item: String, var isChecked: String, val username: String, val selectedPlace: SelectedPlace? = null)
+data class ChecklistItem(val item: String, var isChecked: String, val username: String, var selectedPlace: SelectedPlace? = SelectedPlace(), var completionDate: String? = "", var comments: String? = "", var creationDate: String? = LocalDate.now().toString())
