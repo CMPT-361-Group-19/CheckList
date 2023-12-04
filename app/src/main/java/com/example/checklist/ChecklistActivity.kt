@@ -142,10 +142,10 @@ class ChecklistActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     val isDeleted = itemToDelete?.let {viewModel.deleteItemIfValid(groupIdentifier,it,username)}
                     if(isDeleted?.await() == true){
-                        Toast.makeText(this@ChecklistActivity,"Deleted entry",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ChecklistActivity,"Entry deleted",Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        Toast.makeText(this@ChecklistActivity,"Ypu cannot delete entries made by other members",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ChecklistActivity,"You cannot delete entries made by other members!",Toast.LENGTH_SHORT).show()
                         viewHolder.adapterPosition.takeIf { it != RecyclerView.NO_POSITION }
                             ?.let { checkListAdapter.notifyItemChanged(it) }
                     }
