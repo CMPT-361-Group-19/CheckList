@@ -56,10 +56,18 @@ class GroupViewActivity : AppCompatActivity() {
                     // Already in Home, do nothing or refresh if needed
                     true
                 }
+                //for profile button in bottom nav bar
+                R.id.profile -> {
+                    val intent = Intent(this,profile::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> false
             }
         }
-        findViewById<Button>(R.id.logoutButton).setOnClickListener { logout() }
+
+        bottomNavigationView.selectedItemId = R.id.home
+//        findViewById<Button>(R.id.logoutButton).setOnClickListener { logout() }
     }
 
     private fun updateList(groupList : ArrayList<String>) {
@@ -93,9 +101,6 @@ class GroupViewActivity : AppCompatActivity() {
         lifecycleScope.launch {
 
             val groupList = database.getGroupsWithUser(username)
-            kotlinx.coroutines.delay(400)
-            processRestOfPage(groupList)
-
             database.getGroupsWithUser(username)
         }
 
@@ -206,12 +211,12 @@ class GroupViewActivity : AppCompatActivity() {
     }
 
 
-    private fun logout(){
-        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false)
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-
-    }
+//    private fun logout(){
+//        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false)
+//        val intent = Intent(this, LoginActivity::class.java)
+//        startActivity(intent)
+//
+//    }
 
 
 }

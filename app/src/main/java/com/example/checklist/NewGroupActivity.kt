@@ -31,11 +31,16 @@ class NewGroupActivity : AppCompatActivity() {
                     // Already in group, do nothing or refresh if needed
                     true
                 }
+                R.id.profile -> {
+                    startActivity(Intent(this@NewGroupActivity, profile::class.java))
+                    true
+                }
 
                 else -> false
             }
-        }
 
+        }
+        bottomNavigationView.selectedItemId = R.id.group
 
         database = Database()
         username = intent.getStringExtra("user")!!

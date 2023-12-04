@@ -45,6 +45,10 @@ class ChecklistActivity : AppCompatActivity() {
                     startActivity(Intent(this@ChecklistActivity, GroupViewActivity::class.java))
                     true
                 }
+                R.id.profile -> {
+                    startActivity(Intent(this@ChecklistActivity, profile::class.java))
+                    true
+                }
                 else -> false
             }
         }
