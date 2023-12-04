@@ -34,38 +34,21 @@
                 android:textSize="15sp"
                 android:text="You have 0 groups."/>
 
-            <Button
-                android:id="@+id/logoutButton"
-                app:backgroundTint="@null"
-                android:background="@drawable/rounded_color_view_navy_blue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="Logout"></Button>
-
             <GridView
                 android:id="@+id/gridView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_below="@id/subtextMyGroups"
                 android:gravity="center"
                 android:horizontalSpacing="8dp"
                 android:numColumns="2"
                 android:verticalSpacing="8dp" />
 
+                <include layout="@layout/navigation_drawer"/>
+
+
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/navigationDrawer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/groupLayout"
-            app:layout_constraintEnd_toEndOf="parent">
 
-            <include layout="@layout/navigation_drawer"/>
-        </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

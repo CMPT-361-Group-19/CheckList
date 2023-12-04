@@ -282,9 +282,30 @@ class Database {
             if (item != null) {
                 groupList.add(item)
             }
-            //Log.i("loca", "${item}")
         }
 
+        return groupList
+    }
+
+    suspend fun getUserAssociatedGroups(username: String): MutableLiveData<ArrayList<String>>{
+        database = Firebase.database.reference
+        val groupList: MutableLiveData<ArrayList<String>> = MutableLiveData()
+        val tempList = arrayListOf<String>()
+
+        // get all the groups from groups, then go to path participants, then check if username is in there
+        val dataSnapshot = database.child("groups").get().await()
+        for (snapshot in dataSnapshot.children) {
+            val item = snapshot.getValue(Group::class.java)
+            if (item != null) {
+                if (item.groupId != null) {
+                    if (snapshot.child("participants").hasChild(username)) {
+                        tempList.add(item.groupId!!)
+                    }
+                }
+            }
+        }
+        println()
+        groupList.postValue(tempList)
         return groupList
     }
 
@@ -314,13 +335,8 @@ class Database {
                 groups.add(2, long.getValue(Double::class.java).toString())
                 groups.add(3,lat.getValue(Double::class.java).toString())
 
-
                 itemList.add(groups)
-
-
             }
-
-
         }
 
 
@@ -334,5 +350,85 @@ class Database {
                 .removeValue()
         }
     }
+
+//    update username
+    suspend fun updateUsername(oldUsername: String, newUsername: String) {
+    withContext(Dispatchers.IO) {
+        database = Firebase.database.reference
+
+//        Update on Accounts level
+        // Step 1: Copy data from old key to new key
+        database.child("accounts").child(oldUsername).get()
+            .addOnSuccessListener { oldDataSnapshot ->
+                if (oldDataSnapshot.exists()) {
+                    // Get the data from the old key
+                    val userData = oldDataSnapshot.getValue()
+//                    update username in userData to newUsername
+                    // Create a new node with the new key and set the data
+                    database.child("accounts").child(newUsername).setValue(userData)
+                        .addOnSuccessListener {
+                            database.child("accounts").child(newUsername).child("username")
+                                .setValue(newUsername)
+                            // Step 2: After successfully copying, remove the old key
+                            database.child("accounts").child(oldUsername).removeValue()
+                                .addOnSuccessListener {
+                                    // Old key removed, update complete
+                                    // Handle success or any additional operations
+                                }
+                                .addOnFailureListener { /* Handle failure */ }
+                        }
+                        .addOnFailureListener { /* Handle failure */ }
+                } else {
+                    // Handle if the old key doesn't exist
+                }
+            }.addOnFailureListener { /* Handle failure */ }
+
+//        Update on Groups Participant level
+//            remove the name from group participants and update it with the new name
+        database.child("groups").get().addOnSuccessListener { snapshot ->
+            for (thing in snapshot.children) {
+                val groupId = thing.key // Get the group ID directly
+
+                // Check if the group has the old username as a participant
+                if (thing.child("participants").hasChild(oldUsername)) {
+                    database.child("groups").child(groupId!!).child("participants")
+                        .child(oldUsername).removeValue()
+                    database.child("groups").child(groupId).child("participants").child(newUsername)
+                        .setValue(newUsername)
+                }
+            }
+        }.addOnFailureListener { error ->
+            Log.e("firebase", "Error getting group data", error)
+        }
+
+//        update within group item with username
+        database.child("groups").get().addOnSuccessListener { snapshot ->
+            for (thing in snapshot.children) {
+                val groupId = thing.key // Get the group ID directly
+
+                // Iterate through each item within the group
+                for (itemSnapshot in thing.child("items").children) {
+                    val username = itemSnapshot.child("username").getValue(String::class.java)
+                    if (username == oldUsername) {
+                        itemSnapshot.child("username").ref.setValue(newUsername)
+                    }
+                }
+            }
+        }.addOnFailureListener { error ->
+            Log.e("firebase", "Error getting group data", error)
+        }
+
+
+    }
+}
+
+    suspend fun updatePassword(username: String, newPassword: String){
+        withContext(Dispatchers.IO) {
+            database = Firebase.database.reference
+            database.child("accounts").child(username).child("password").setValue(newPassword)
+        }
+    }
+
+
 
 }

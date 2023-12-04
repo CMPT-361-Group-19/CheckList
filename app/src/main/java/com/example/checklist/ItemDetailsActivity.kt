@@ -57,7 +57,7 @@ class ItemDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         googleMapsButton = findViewById(R.id.googleMaps)
-            googleMapsButton.setOnClickListener {
+        googleMapsButton.setOnClickListener {
             val gmmIntentUri = Uri.parse("google.navigation:q=${itemLocation?.latitude},${itemLocation?.longitude}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             startActivity(mapIntent)

@@ -48,7 +48,6 @@ class GroupViewActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.group -> {
                     val intent = Intent(this,NewGroupActivity::class.java)
-                    intent.putExtra("user", username)
                     startActivity(intent)
                     true
                 }
@@ -56,14 +55,24 @@ class GroupViewActivity : AppCompatActivity() {
                     // Already in Home, do nothing or refresh if needed
                     true
                 }
+                //for profile button in bottom nav bar
+                R.id.profile -> {
+                    val intent = Intent(this,profile::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> false
             }
         }
-        findViewById<Button>(R.id.logoutButton).setOnClickListener { logout() }
+
+        bottomNavigationView.selectedItemId = R.id.home
     }
 
     private fun updateList(groupList : ArrayList<String>) {
         val gridView = findViewById<GridView>(R.id.gridView)
+
+        // If username is updated from profile or etc
+        username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
 
         var numGroups = groupList.size
 
@@ -201,13 +210,6 @@ class GroupViewActivity : AppCompatActivity() {
         startForegroundService(serviceIntent)
     }
 
-
-    private fun logout(){
-        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false).apply()
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-
-    }
 
 
 }
