@@ -48,7 +48,6 @@ class GroupViewActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.group -> {
                     val intent = Intent(this,NewGroupActivity::class.java)
-                    intent.putExtra("user", username)
                     startActivity(intent)
                     true
                 }
@@ -72,6 +71,9 @@ class GroupViewActivity : AppCompatActivity() {
 
     private fun updateList(groupList : ArrayList<String>) {
         val gridView = findViewById<GridView>(R.id.gridView)
+
+        // If username is updated from profile or etc
+        username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
 
         var numGroups = groupList.size
 

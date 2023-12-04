@@ -36,9 +36,7 @@ class ChecklistActivity : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.group -> {
-                    val intent = Intent(this,NewGroupActivity::class.java)
-                    intent.putExtra("user", username)
-                    startActivity(intent)
+                    startActivity(Intent(this@ChecklistActivity, NewGroupActivity::class.java))
                     true
                 }
                 R.id.home -> {

@@ -43,7 +43,7 @@ class NewGroupActivity : AppCompatActivity() {
         bottomNavigationView.selectedItemId = R.id.group
 
         database = Database()
-        username = intent.getStringExtra("user")!!
+        username = getSharedPreferences("Checklist", MODE_PRIVATE).getString("username","empty").toString()
 
         val context = this
 
