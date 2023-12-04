@@ -35,7 +35,8 @@ class Database {
             val task = snapshot.key.toString()
             val isChecked = snapshot.child("checked").value
             val username = snapshot.child("username").value
-            val checklistItem = ChecklistItem(task,isChecked.toString(),username.toString())
+            val date = snapshot.child("completionDate").value
+            val checklistItem = ChecklistItem(task,isChecked.toString(),username.toString(), completionDate = date.toString())
             Log.d("look", "onChildAdded before: $list")
             list?.add(checklistItem)
             Log.d("look", "onChildAdded after: $list")
@@ -47,7 +48,8 @@ class Database {
             val task = snapshot.key.toString()
             val isChecked = snapshot.child("checked").value
             val username = snapshot.child("username").value
-            val checklistItem = ChecklistItem(task,isChecked.toString(),username.toString())
+            val date = snapshot.child("completionDate").value
+            val checklistItem = ChecklistItem(task,isChecked.toString(),username.toString(), completionDate = date.toString())
             Log.d("look", "onChildChangedBefore: $list")
             val foundItem = list?.find { it.item == checklistItem.item }
             foundItem?.let{it.isChecked = checklistItem.isChecked}
@@ -61,7 +63,8 @@ class Database {
             val task = snapshot.key.toString()
             val isChecked = snapshot.child("checked").value
             val username = snapshot.child("username").value
-            val checklistItem = ChecklistItem(task,isChecked.toString(),username.toString())
+            val date = snapshot.child("completionDate").value
+            val checklistItem = ChecklistItem(task,isChecked.toString(),username.toString(), completionDate = date.toString())
             list?.remove(checklistItem)
             Log.d("look", "onChildRemoved after: $list")
             _groupItems.value = list
@@ -110,10 +113,9 @@ class Database {
     }
 
     fun validSignInCredentials(username: String, password: String,callback: (Boolean) -> Unit) {
-        var data: Account = Account(username,password)
         database = Firebase.database.reference
         database.child("accounts").child(username).child("password").get().addOnSuccessListener {
-            Log.i("firebase", "Got value ${it.value} $password")
+            Log.d("firebase", "Got value ${it.value} $password")
             callback(it.value == password)
 
         }.addOnFailureListener{
@@ -257,16 +259,16 @@ class Database {
     }
 
     // extracting details about a certain item added to checklist.
-    suspend fun getGroupItemDetails(groupId: String, itemName: String, username: String): ChecklistItem {
+    suspend fun getGroupItemDetails(groupId: String, itemName: String): ChecklistItem {
         database = Firebase.database.reference
         val dataSnapshot = database.child("groups").child(groupId).child("items").child(itemName).get().await()
-        Log.d("inside here","inside getGroupItems ${dataSnapshot.value}")
         val adderName = dataSnapshot.child("username").value.toString()
-        val lat = dataSnapshot.child("selectedPlace").child("location").child("latitude").value.toString()
-        val long = dataSnapshot.child("selectedPlace").child("location").child("longitude").value.toString()
-
-//        val item = dataSnapshot.getValue(ChecklistItem::class.java)
-        val item = ChecklistItem(itemName, isChecked = "false",username=adderName, selectedPlace =SelectedPlace(location = LatLng(lat.toDouble(),long.toDouble())))
+        val comments = dataSnapshot.child("comments").value.toString()
+        val date = dataSnapshot.child("completionDate").value.toString()
+        Log.d("inside here","inside getGroupItems ${dataSnapshot.value} $adderName")
+        val lat = dataSnapshot.child("selectedPlace").child("location").child("latitude").value.toString() //can be null
+        val long = dataSnapshot.child("selectedPlace").child("location").child("longitude").value.toString() //can be null
+        var item = ChecklistItem(itemName, isChecked = "false",username=adderName, selectedPlace = SelectedPlace(location = LatLng(lat.toDouble(),long.toDouble())), comments = comments, completionDate = date )
         Log.d("inside here", "in the db $item")
         return item
     }

@@ -5,8 +5,8 @@
      android:layout_height="wrap_content"
      android:layout_marginLeft="10dp"
      android:layout_marginRight="10dp"
-     android:layout_marginTop="5dp"
-     android:layout_marginBottom="5dp"
+     android:layout_marginTop="2.5dp"
+     android:layout_marginBottom="2.5dp"
      app:cardCornerRadius="8dp"
      app:cardElevation="2dp"
      app:cardUseCompatPadding="true"
@@ -15,22 +15,50 @@
  <LinearLayout
  android:layout_width="match_parent"
  android:layout_height="wrap_content"
- android:weightSum="4">
+ android:weightSum="1">
 
- <CheckBox
-     android:id="@+id/checkBox"
-     android:layout_weight="3"
-     android:layout_width="70dp"
-     android:layout_height="wrap_content"
-     android:textSize="20sp"
-     android:text="default"></CheckBox>
+     <CheckBox
+         android:id="@+id/checkBox"
+         android:layout_width="24dp"
+         android:layout_height="wrap_content"
+         android:layout_gravity="end"
+         app:buttonTint="@null"
+         android:button="@drawable/checkbox_bg"
+         android:checked="true"
+         android:layout_weight="0.2"
+         android:text=""></CheckBox>
 
- <ImageView
-     android:layout_weight="1"
-     android:id="@+id/info"
-     android:layout_width="20dp"
-     android:layout_height="20dp"
-     android:layout_gravity="center_vertical"
-     android:src="@drawable/info_circle"></ImageView>
+     <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:orientation="vertical"
+         android:layout_gravity="center_vertical"
+         android:layout_weight="0.8">
+
+     <TextView
+         android:id="@+id/info"
+         android:textSize="20sp"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textStyle="bold"
+         android:text="Default" />
+         <TextView
+             android:id="@+id/date"
+             android:textSize="15sp"
+             android:paddingBottom="5dp"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:visibility="gone"
+             android:text="Default" />
+     </LinearLayout>
+
+
+<!-- <ImageView-->
+<!--     android:layout_weight="1"-->
+<!--     android:id="@+id/info"-->
+<!--     android:layout_width="20dp"-->
+<!--     android:layout_height="20dp"-->
+<!--     android:layout_gravity="center_vertical"-->
+<!--     android:src="@drawable/info_circle"></ImageView>-->
  </LinearLayout>
      </androidx.cardview.widget.CardView>

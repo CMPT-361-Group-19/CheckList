@@ -36,6 +36,8 @@
 
             <Button
                 android:id="@+id/logoutButton"
+                app:backgroundTint="@null"
+                android:background="@drawable/rounded_color_view_navy_blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

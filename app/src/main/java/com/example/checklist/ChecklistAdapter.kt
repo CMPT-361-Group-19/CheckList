@@ -28,17 +28,20 @@ class ChecklistAdapter(
                      private val groupIdentifier: String,
                      private val onItemClickListener: ((ChecklistItem) -> Unit)?) : RecyclerView.ViewHolder(view) {
         val checkBox: CheckBox
-        private val infoIcon: ImageView
+        val info: TextView
+        val date: TextView
 
         private val tag = "CheckListHolder"
 
 
         init {
             // Define click listener for the ViewHolder's View
-            infoIcon = view.findViewById(R.id.info)
+//            infoIcon = view.findViewById(R.id.info)
             checkBox = view.findViewById(R.id.checkBox)
+            info = view.findViewById(R.id.info)
+            date = view.findViewById(R.id.date)
 
-            infoIcon.setOnClickListener{
+            info.setOnClickListener{
                 Log.d("look", "going to info activity")
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -48,7 +51,7 @@ class ChecklistAdapter(
             }
             checkBox.setOnCheckedChangeListener{buttonView, isChecked ->
             Log.d(tag, "look unchecked/checked ${checkBox.text} $isChecked")
-                viewModel.changeItemStatus(groupIdentifier, checkBox.text.toString(), username, isChecked)
+                viewModel.changeItemStatus(groupIdentifier, info.text.toString(), username, isChecked)
             }
 
         }
@@ -68,8 +71,15 @@ class ChecklistAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.d(tag,"look inside bind")
         val item = dataSet?.get(position)
-        holder.checkBox.text = dataSet?.get(position)?.item ?: "Empty"
-        holder.checkBox.isChecked = dataSet?.get(position)?.isChecked.toBoolean()
+        holder.info.text = item?.item ?: "Empty"
+        holder.checkBox.isChecked = item?.isChecked.toBoolean()
+        if(item?.completionDate != "null"){
+            holder.date.text = item?.completionDate ?: "Empty"
+            holder.date.visibility = View.VISIBLE
+        }
+        else {
+            holder.date.visibility = View.GONE
+        }
     }
 
     fun updateDataset(list: ArrayList<ChecklistItem>){

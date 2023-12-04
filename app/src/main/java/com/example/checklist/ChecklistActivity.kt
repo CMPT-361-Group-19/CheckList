@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.util.Log
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -106,6 +108,24 @@ class ChecklistActivity : AppCompatActivity() {
             onMicClicked()
         }
 
+        val easyAddEditText = findViewById<EditText>(R.id.easyAddEditText)
+
+        easyAddEditText.setOnEditorActionListener(
+            TextView.OnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // Get the entered text
+                    val newItem: String = easyAddEditText.text.toString()
+
+                    // Add the new item to your checklist (implement your own logic)
+                   easySaveTaskToDB(newItem)
+
+                    // Clear the EditText after adding the item
+                    easyAddEditText.text.clear()
+                    return@OnEditorActionListener true
+                }
+                false
+            })
+
         ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT){
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -185,8 +205,18 @@ class ChecklistActivity : AppCompatActivity() {
 
             if(res?.get(0) != null){
                 val item =  res?.get(0).toString()
-                viewModel.addGroupItems(groupIdentifier, ChecklistItem(item,"false",username))
+                easySaveTaskToDB(item)
             }
         }
     }}
+
+    private fun easySaveTaskToDB(itemName: String) {
+        Log.d(tag, "look in save task $username")
+        val checkListItem = ChecklistItem(itemName, false.toString(), username, SelectedPlace())
+        if (itemName.isNullOrBlank()) {
+            Toast.makeText(this, "Fields cannot be null", Toast.LENGTH_SHORT).show()
+        } else {
+            viewModel.addGroupItems(groupIdentifier,checkListItem)
+        }
+    }
 }

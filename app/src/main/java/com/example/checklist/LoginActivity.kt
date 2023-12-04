@@ -21,10 +21,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val database = Database()
-        database.writeNewAccount("bob", "hi")
-
-
         findViewById<Button>(R.id.logInButton).setOnClickListener {logInButtonClicked()}
         findViewById<TextView>(R.id.signInText).setOnClickListener{signInTextClicked()}
     }
@@ -39,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("inside", "you are clicking $isValid")
                 val sharedPreferences = getSharedPreferences("Checklist", MODE_PRIVATE)
                 sharedPreferences.edit().putString("username",usernameField).apply()
-                getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",true)
+                getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",true).apply()
                 val intent = Intent(this, GroupViewActivity::class.java)
                 startActivity(intent)
             }

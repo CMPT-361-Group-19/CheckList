@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:padding = "16dp">
 
@@ -10,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=" item detail"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
@@ -25,21 +26,52 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/item_detail"
         android:layout_marginBottom="10dp"/>
+    <TextView
+        android:id="@+id/item_comments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text=" item comments"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/item_user"
+        android:layout_marginBottom="10dp"/>
+    <TextView
+        android:id="@+id/item_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text=" item date"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/item_comments"
+        android:layout_marginBottom="10dp"/>
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_below="@id/item_user"
+        android:layout_below="@id/item_date"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"/>
 
     <Button
-        android:id="@+id/close_button"
+        android:id="@+id/googleMaps"
+        android:background="@drawable/rounded_color_view_navy_blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/map"
+        app:backgroundTint="@null"
+        android:layout_centerHorizontal="true"
+        android:enabled="false"
+        android:text="Open in Maps"/>
+
+    <Button
+        android:id="@+id/close_button"
+        android:background="@drawable/rounded_color_view_navy_blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/googleMaps"
+        app:backgroundTint="@null"
         android:layout_centerHorizontal="true"
         android:text="Close"/>
 

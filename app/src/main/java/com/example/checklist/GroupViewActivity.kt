@@ -29,7 +29,7 @@ class GroupViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val isLoggedIn = getSharedPreferences("Checklist", MODE_PRIVATE).getBoolean("loggedIn",false)
-        if(isLoggedIn){
+        if(!isLoggedIn){
             val intent = Intent(this,LoginActivity::class.java)
             startActivity(intent)
         }
@@ -93,15 +93,11 @@ class GroupViewActivity : AppCompatActivity() {
         lifecycleScope.launch {
 
             val groupList = database.getGroupsWithUser(username)
-            kotlinx.coroutines.delay(400)
-            processRestOfPage(groupList)
-
             database.getGroupsWithUser(username)
         }
 
         database.groupList.observe(this) {
             updateList(it)
-
         }
 
     }
@@ -207,7 +203,7 @@ class GroupViewActivity : AppCompatActivity() {
 
 
     private fun logout(){
-        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false)
+        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false).apply()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
 
