@@ -24,6 +24,11 @@ class Database {
     }
     val groupItems get() = _groupItems
 
+    private val _groupList = MutableLiveData<ArrayList<String>>().apply {
+        value = ArrayList()
+    }
+    val groupList get() = _groupList
+
     private val groupItemListener = object: ChildEventListener{
         override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
             val list = _groupItems.value
