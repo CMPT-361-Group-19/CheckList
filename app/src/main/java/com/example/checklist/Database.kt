@@ -1,8 +1,8 @@
 package com.example.checklist
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.checklist.activities.SelectedPlace
 import com.example.checklist.viewmodel.ChecklistItem
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Firebase
@@ -12,7 +12,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.database
-import com.google.firebase.database.values
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext

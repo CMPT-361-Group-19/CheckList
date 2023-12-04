@@ -1,4 +1,4 @@
-package com.example.checklist
+package com.example.checklist.activities
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
@@ -21,6 +21,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.checklist.adapters.ChecklistAdapter
+import com.example.checklist.R
 import com.example.checklist.viewmodel.ChecklistItem
 import com.example.checklist.viewmodel.ChecklistViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -90,7 +92,7 @@ class ChecklistActivity : AppCompatActivity() {
         }
 
         findViewById<ImageView>(R.id.addButton).setOnClickListener{
-            val intent = Intent(this,AddItemActivity::class.java)
+            val intent = Intent(this, AddItemActivity::class.java)
             intent.putExtra("groupId",groupIdentifier)
             startActivity(intent)
         }
@@ -198,7 +200,7 @@ class ChecklistActivity : AppCompatActivity() {
 
     private fun checklistItemClicked(item: ChecklistItem){
         Log.d("ChecklistActivity","Item clicked: ${item.item}")
-        val intent = Intent(this@ChecklistActivity,ItemDetailsActivity::class.java)
+        val intent = Intent(this@ChecklistActivity, ItemDetailsActivity::class.java)
         intent.putExtra("itemName",item.item)
         intent.putExtra("itemUser",username)
         intent.putExtra("itemLocation",item.selectedPlace?.location)

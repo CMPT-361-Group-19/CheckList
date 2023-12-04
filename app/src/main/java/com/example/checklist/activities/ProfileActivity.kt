@@ -1,4 +1,4 @@
-package com.example.checklist
+package com.example.checklist.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import com.example.checklist.Database
+import com.example.checklist.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
@@ -35,7 +37,7 @@ class ProfileActivity: AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.group -> {
-                    startActivity(Intent(this,NewGroupActivity::class.java))
+                    startActivity(Intent(this, NewGroupActivity::class.java))
                     true
                 }
                 R.id.home -> {

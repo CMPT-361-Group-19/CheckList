@@ -1,22 +1,17 @@
 package com.example.checklist.viewmodel
 
-import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.checklist.Database
-import com.example.checklist.SelectedPlace
-import com.google.android.gms.maps.model.LatLng
+import com.example.checklist.activities.SelectedPlace
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
-import java.util.Locale
 
 class ChecklistViewModel: ViewModel() {
     private val tag = "ChecklistViewModel"

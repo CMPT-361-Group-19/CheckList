@@ -1,4 +1,4 @@
-package com.example.checklist
+package com.example.checklist.activities
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -8,14 +8,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.checklist.R
 import com.example.checklist.viewmodel.AddItemViewModel
 import com.example.checklist.viewmodel.ChecklistItem
 import com.google.android.gms.common.api.Status
@@ -55,7 +53,7 @@ class AddItemActivity : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.group -> {
-                    val intent = Intent(this,NewGroupActivity::class.java)
+                    val intent = Intent(this, NewGroupActivity::class.java)
                     intent.putExtra("user", username)
                     startActivity(intent)
                     true

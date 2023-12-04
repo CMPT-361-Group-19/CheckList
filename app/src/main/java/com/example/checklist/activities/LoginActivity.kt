@@ -1,8 +1,6 @@
-package com.example.checklist
+package com.example.checklist.activities
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,8 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import com.example.checklist.Database
+import com.example.checklist.R
 
 class LoginActivity : AppCompatActivity() {
 
@@ -47,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signInTextClicked(){
-        val intent = Intent(this,CreateAccountActivity::class.java)
+        val intent = Intent(this, CreateAccountActivity::class.java)
         startActivity(intent)
     }
 

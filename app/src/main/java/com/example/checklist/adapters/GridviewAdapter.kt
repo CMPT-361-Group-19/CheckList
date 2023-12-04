@@ -1,4 +1,4 @@
-package com.example.checklist.ui.home
+package com.example.checklist.adapters
 
 import android.content.Context
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.example.checklist
+package com.example.checklist.activities
 
 import android.Manifest
 import android.content.DialogInterface
@@ -13,7 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.checklist.ui.home.GridviewAdapter
+import com.example.checklist.Database
+import com.example.checklist.adapters.GridviewAdapter
+import com.example.checklist.LocationService
+import com.example.checklist.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
@@ -28,7 +31,7 @@ class GroupViewActivity : AppCompatActivity() {
 
         val isLoggedIn = getSharedPreferences("Checklist", MODE_PRIVATE).getBoolean("loggedIn",false)
         if(!isLoggedIn){
-            val intent = Intent(this,LoginActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
 
@@ -47,7 +50,7 @@ class GroupViewActivity : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.group -> {
-                    val intent = Intent(this,NewGroupActivity::class.java)
+                    val intent = Intent(this, NewGroupActivity::class.java)
                     startActivity(intent)
                     true
                 }
@@ -57,7 +60,7 @@ class GroupViewActivity : AppCompatActivity() {
                 }
                 //for ProfileActivity button in bottom nav bar
                 R.id.profile -> {
-                    val intent = Intent(this,ProfileActivity::class.java)
+                    val intent = Intent(this, ProfileActivity::class.java)
                     startActivity(intent)
                     true
                 }
