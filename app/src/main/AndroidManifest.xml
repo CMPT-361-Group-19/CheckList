@@ -43,7 +43,8 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ChecklistActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".GroupViewActivity"
             android:exported="true">
