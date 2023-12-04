@@ -44,6 +44,7 @@
         <activity
             android:name=".activities.ChecklistActivity"
             android:exported="false" />
+
         <activity
             android:name=".activities.GroupViewActivity"
             android:exported="true">
