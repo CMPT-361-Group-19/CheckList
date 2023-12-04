@@ -1,4 +1,4 @@
-package com.example.checklist
+package com.example.checklist.activities
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -8,14 +8,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.checklist.R
 import com.example.checklist.viewmodel.AddItemViewModel
 import com.example.checklist.viewmodel.ChecklistItem
 import com.google.android.gms.common.api.Status
@@ -36,6 +34,7 @@ class AddItemActivity : AppCompatActivity() {
     private val selectedPlace: SelectedPlace = SelectedPlace()
     private lateinit var username: String
     private lateinit var bottomNavigationView: BottomNavigationView
+    private var dateString = ""
     private lateinit var date: LocalDate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +53,7 @@ class AddItemActivity : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.group -> {
-                    val intent = Intent(this,NewGroupActivity::class.java)
+                    val intent = Intent(this, NewGroupActivity::class.java)
                     intent.putExtra("user", username)
                     startActivity(intent)
                     true
@@ -86,9 +85,11 @@ class AddItemActivity : AppCompatActivity() {
         }
         findViewById<RadioButton>(R.id.today).setOnClickListener {
             date = LocalDate.now()
+            dateString = date.toString()
         }
         findViewById<RadioButton>(R.id.tomorrow).setOnClickListener {
             date = LocalDate.now().plusDays(1)
+            dateString = date.toString()
         }
         findViewById<RadioButton>(R.id.calendarImageView).setOnClickListener {
             onCalendarClick()
@@ -162,7 +163,7 @@ class AddItemActivity : AppCompatActivity() {
         Log.d(tag, "look in save task $date")
         val itemName = findViewById<TextView>(R.id.itemText).text.toString()
         val comments = findViewById<EditText>(R.id.notesText).text.toString()
-        val checkListItem = ChecklistItem(itemName, false.toString(), username, selectedPlace, date.toString(), comments)
+        val checkListItem = ChecklistItem(itemName, false.toString(), username, selectedPlace, dateString, comments)
         if (itemName.isNullOrBlank() || selectedPlace.location == null) {
             Toast.makeText(this, "Fields cannot be null", Toast.LENGTH_SHORT).show()
         } else {
@@ -179,12 +180,11 @@ class AddItemActivity : AppCompatActivity() {
         val dayOfMonth: Int = calendar.get(Calendar.DAY_OF_MONTH)
 
         // Create a DatePickerDialog and show it
-
-        // Create a DatePickerDialog and show it
         val datePickerDialog = DatePickerDialog(
             this,
             { view, year, monthOfYear, dayOfMonth ->
                 date = LocalDate.of(year, monthOfYear,dayOfMonth)
+                dateString = date.toString()
             },
             year,
             month,

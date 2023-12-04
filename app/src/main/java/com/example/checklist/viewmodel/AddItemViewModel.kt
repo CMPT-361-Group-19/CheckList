@@ -17,8 +17,9 @@ class AddItemViewModel(): ViewModel() {
     fun saveTask(groupId: String, checklistItem: ChecklistItem)
     {
         viewModelScope.launch {
-            Log.d(tag,"look in view model save")
-            database.addGroupItems(groupId,checklistItem)
+            withContext(Dispatchers.IO) {
+                database.addGroupItems(groupId, checklistItem)
+            }
         }
     }
 }

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddItemActivity"
+    tools:context=".activities.AddItemActivity"
     android:layout_gravity="center">
 
     <EditText
@@ -78,6 +78,7 @@
                 app:backgroundTint="@null"
                 android:textColor="@color/white"
                 android:textAlignment="center"
+                android:checked="false"
                 android:button="@null"
                 android:textSize="20dp"
                 android:text="Today"/>
@@ -91,6 +92,7 @@
                 android:textAlignment="center"
                 android:button="@null"
                 android:layout_marginRight="5dp"
+                android:checked="false"
                 android:background="@drawable/button_status"
                 app:backgroundTint="@null"
                 android:textColor="@color/white"
@@ -103,10 +105,11 @@
                 android:layout_weight="0.25"
                 android:background="@drawable/button_status"
                 app:backgroundTint="@null"
-                android:drawableStart="@drawable/ic_add_group"
+                android:drawableStart="@drawable/calendar_week_svgrepo_com"
                 android:button="@null"
                 android:gravity="center"
                 android:text=""
+                android:checked="false"
                 android:textColor="@color/white"/>
         </RadioGroup>
 

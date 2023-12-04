@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/new_group"
                 android:textSize="25sp"
+                android:text="Join an Existing Group"
                 android:textColor="@color/navy_blue"
                 android:layout_centerHorizontal="true"/>
 
@@ -52,7 +53,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_add_group"
+                    android:drawableEnd="@drawable/plus_large_svgrepo_com"
                     app:backgroundTint="@null"
                     android:background="@drawable/rounded_color_view_navy_blue"
                     android:text="Add"/>
@@ -170,7 +171,7 @@
                     android:layout_height="wrap_content"
                     app:backgroundTint="@null"
                     android:background="@drawable/rounded_color_view_navy_blue"
-                    android:drawableEnd="@drawable/ic_delete_group"
+                    android:drawableEnd="@drawable/cross_svgrepo_com"
                     android:text="Cancel"/>
 
 
