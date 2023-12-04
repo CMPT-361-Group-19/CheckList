@@ -57,7 +57,7 @@ class GroupViewActivity : AppCompatActivity() {
             }
         }
         bottomNavigationView.selectedItemId = R.id.home
-        findViewById<Button>(R.id.logoutButton).setOnClickListener { logout() }
+//        findViewById<Button>(R.id.logoutButton).setOnClickListener { logout() }
     }
 
     private fun processRestOfPage(groupList : ArrayList<String>) {
@@ -102,11 +102,11 @@ class GroupViewActivity : AppCompatActivity() {
             processRestOfPage(groupList)
         }
     }
+//    private fun logout(){
+//        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false)
+//        val intent = Intent(this, LoginActivity::class.java)
+//        startActivity(intent)
+//
+//    }
 
-    private fun logout(){
-        getSharedPreferences("Checklist", MODE_PRIVATE).edit().putBoolean("loggedIn",false)
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-
-    }
 }
