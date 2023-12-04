@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.util.Locale
 
-class ChecklistViewModel(): ViewModel() {
+class ChecklistViewModel: ViewModel() {
     private val tag = "ChecklistViewModel"
     private val database = Database()
     private val _itemDetails = MutableLiveData<ChecklistItem>()
@@ -28,8 +28,10 @@ class ChecklistViewModel(): ViewModel() {
     fun getGroupItems(groupId: String) {
         Log.d(tag, "look inside get groups viewmodel")
         viewModelScope.launch {
-            Log.d(tag, "look inside get groups viewmodel2")
-            database.attachGroupItemListener(groupId)
+            withContext(Dispatchers.IO) {
+                Log.d(tag, "look inside get groups viewmodel2")
+                database.attachGroupItemListener(groupId)
+            }
         }
     }
 
@@ -37,14 +39,18 @@ class ChecklistViewModel(): ViewModel() {
     fun addGroupItems(groupId: String, checklistItem: ChecklistItem) {
         Log.d(tag, "look inside add group item viewmodel")
         viewModelScope.launch {
-            database.addGroupItems(groupId, checklistItem)
-            Log.d(tag, "look inside get groups viewmodel2 ${groupItems.value}")
+            withContext(Dispatchers.IO) {
+                database.addGroupItems(groupId, checklistItem)
+                Log.d(tag, "look inside get groups viewmodel2 ${groupItems.value}")
+            }
         }
     }
 
     fun changeItemStatus(groupId: String, item: String, username: String, isChecked: Boolean) {
         viewModelScope.launch {
-            database.changeItemStatus(groupId, item, username, isChecked)
+            withContext(Dispatchers.IO) {
+                database.changeItemStatus(groupId, item, username, isChecked)
+            }
         }
     }
 
@@ -68,24 +74,28 @@ class ChecklistViewModel(): ViewModel() {
     }
 
     fun getItemDetails(groupId: String, itemName: String){
-        viewModelScope.launch{
-            try{
-                Log.d("inside here","inside here")
-                val itemDetails = database.getGroupItemDetails(groupId, itemName)
-                Log.d("inside here", "in vm selectedPlace: ${itemDetails?.selectedPlace}")
+        viewModelScope.launch {
+                try {
+                    Log.d("inside here", "inside here")
+                    val itemDetails = database.getGroupItemDetails(groupId, itemName)
+                    Log.d("inside here", "in vm selectedPlace: ${itemDetails?.selectedPlace}")
 //                _itemDetails.postValue(ChecklistItem(itemName, itemDetails?.isChecked ?: "",username, itemDetails?.selectedPlace))
-                _itemDetails.value = itemDetails
-                Log.d("inside here", "in vm ${_itemDetails.value}}")
+                    _itemDetails.value = itemDetails
+                    Log.d("inside here", "in vm ${_itemDetails.value}}")
 
-            } catch(e: Exception){
-                Log.d(tag, "error getting item details")}
+                } catch (e: Exception) {
+                    Log.d(tag, "error getting item details")
+                }
         }
     }
 
-    fun exitGroup(username: String, groupId: String){
-        viewModelScope.launch {
-            database.removeUserFromGroup(username,groupId)
+    fun exitGroup(username: String, groupId: String) {
+        viewModelScope.launch{
+        withContext(Dispatchers.IO) {
+
+            database.removeUserFromGroup(username, groupId)
         }
+    }
     }
 }
 

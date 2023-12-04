@@ -71,7 +71,7 @@ class Database {
         }
 
         override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
+            return
         }
 
         override fun onCancelled(error: DatabaseError) {
@@ -90,27 +90,11 @@ class Database {
 
     //write account to database
     fun writeNewAccount(username: String, password: String) {
-        val account = Account(username,password)
         database = Firebase.database.reference
         database.child("accounts").child(username).child("username").setValue(username)
         database.child("accounts").child(username).child("password").setValue(password)
     }
 
-    //read from database
-    suspend fun getAccount(username: String, password: String) : Account? {
-        database = Firebase.database.reference
-        val dataSnapshot = database.child("accounts").get().await()
-
-        for (snapshot in dataSnapshot.children) {
-            val account = snapshot.getValue(Account::class.java)
-            if (account != null) {
-                if (account.username == username) {
-                    return account
-                }
-            }
-        }
-        return null // Account not found
-    }
 
     fun validSignInCredentials(username: String, password: String,callback: (Boolean) -> Unit) {
         database = Firebase.database.reference
@@ -148,20 +132,6 @@ class Database {
     }
 
 
-    suspend fun getGroup(groupName: String): Group? {
-        database = Firebase.database.reference
-        val dataSnapshot = database.child("groups").get().await()
-
-        for (snapshot in dataSnapshot.children) {
-            val group = snapshot.getValue(Group::class.java)
-            if (group?.groupId == groupName) {
-
-                return group
-            }
-        }
-        return null // Group not found
-    }
-
 
 
     //return the list of groups in the database
@@ -184,9 +154,10 @@ class Database {
     fun writeGroupParticipant(groupId: String? = null, username: String? = null) {
         database = Firebase.database.reference
 
-        val group = groupId?.let {
+        groupId?.let {
             if (username != null) {
                 database.child("groups").child(it).child("participants").child(username).setValue(username)
+                database.child("accounts").child(username).child("groupList").child(groupId).setValue(groupId)
             }
         }
 
@@ -319,7 +290,7 @@ class Database {
             for (snapshot in dataSnapshot.children) {
                 //snapshot.getValue<ChecklistItem>()
                 //snapshot.childrenCount
-                Log.i("loca", snapshot.key.toString())
+                Log.d("flag", snapshot.key.toString())
                 //snapshot.key.toString()
                 var groups = ArrayList<String>()
                 //add item name
@@ -334,6 +305,7 @@ class Database {
                     .child("location").child("latitude").get().await()
                 groups.add(2, long.getValue(Double::class.java).toString())
                 groups.add(3,lat.getValue(Double::class.java).toString())
+                Log.d("flag", "$groups")
 
                 itemList.add(groups)
             }
@@ -347,6 +319,8 @@ class Database {
         withContext(Dispatchers.IO) {
             database = Firebase.database.reference
             database.child("groups").child(groupId).child("participants").child(username)
+                .removeValue()
+            database.child("accounts").child(username).child("groupList").child(groupId)
                 .removeValue()
         }
     }

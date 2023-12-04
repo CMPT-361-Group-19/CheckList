@@ -36,6 +36,7 @@ class AddItemActivity : AppCompatActivity() {
     private val selectedPlace: SelectedPlace = SelectedPlace()
     private lateinit var username: String
     private lateinit var bottomNavigationView: BottomNavigationView
+    private var dateString = ""
     private lateinit var date: LocalDate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,9 +87,11 @@ class AddItemActivity : AppCompatActivity() {
         }
         findViewById<RadioButton>(R.id.today).setOnClickListener {
             date = LocalDate.now()
+            dateString = date.toString()
         }
         findViewById<RadioButton>(R.id.tomorrow).setOnClickListener {
             date = LocalDate.now().plusDays(1)
+            dateString = date.toString()
         }
         findViewById<RadioButton>(R.id.calendarImageView).setOnClickListener {
             onCalendarClick()
@@ -162,7 +165,7 @@ class AddItemActivity : AppCompatActivity() {
         Log.d(tag, "look in save task $date")
         val itemName = findViewById<TextView>(R.id.itemText).text.toString()
         val comments = findViewById<EditText>(R.id.notesText).text.toString()
-        val checkListItem = ChecklistItem(itemName, false.toString(), username, selectedPlace, date.toString(), comments)
+        val checkListItem = ChecklistItem(itemName, false.toString(), username, selectedPlace, dateString, comments)
         if (itemName.isNullOrBlank() || selectedPlace.location == null) {
             Toast.makeText(this, "Fields cannot be null", Toast.LENGTH_SHORT).show()
         } else {
@@ -179,12 +182,11 @@ class AddItemActivity : AppCompatActivity() {
         val dayOfMonth: Int = calendar.get(Calendar.DAY_OF_MONTH)
 
         // Create a DatePickerDialog and show it
-
-        // Create a DatePickerDialog and show it
         val datePickerDialog = DatePickerDialog(
             this,
             { view, year, monthOfYear, dayOfMonth ->
                 date = LocalDate.of(year, monthOfYear,dayOfMonth)
+                dateString = date.toString()
             },
             year,
             month,

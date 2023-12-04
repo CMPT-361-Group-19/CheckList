@@ -6,24 +6,22 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.GridView
-import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class profile: AppCompatActivity() {
+class ProfileActivity: AppCompatActivity() {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var database: Database
-    private lateinit var imageButton: ImageButton
+    private lateinit var imageButton: ImageView
     private lateinit var username: String
 
-    private lateinit var imageButtonPass: ImageButton
+    private lateinit var imageButtonPass: ImageView
 
     private lateinit var userGroups: MutableLiveData<ArrayList<String>>
 
@@ -68,14 +66,15 @@ class profile: AppCompatActivity() {
         lifecycleScope.launch {
             val retrievedGroups = database.getUserAssociatedGroups (username)
 
-            retrievedGroups.observe(this@profile, { groups ->
+            retrievedGroups.observe(this@ProfileActivity) { groups ->
                 groups?.let {
                     userGroups.value = it
                     val items = userGroups.value ?: emptyList() // Get the list directly
-                    val adapter = ArrayAdapter(this@profile, android.R.layout.simple_list_item_1, items)
+                    val adapter =
+                        ArrayAdapter(this@ProfileActivity, android.R.layout.simple_list_item_1, items)
                     gridView.adapter = adapter
                 }
-            })
+            }
         }
 
         imageButton.setOnClickListener {

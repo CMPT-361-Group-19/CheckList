@@ -29,7 +29,7 @@
             android:name=".ItemDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".profile"
+            android:name=".ProfileActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"/>
 

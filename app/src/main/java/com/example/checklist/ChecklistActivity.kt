@@ -1,18 +1,21 @@
 package com.example.checklist
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,12 +24,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.checklist.viewmodel.ChecklistItem
 import com.example.checklist.viewmodel.ChecklistViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.Locale
-import java.util.Objects
-import kotlin.time.Duration
 
 class ChecklistActivity : AppCompatActivity() {
     private val tag = "ChecklistActivity"
@@ -54,7 +53,7 @@ class ChecklistActivity : AppCompatActivity() {
                     true
                 }
                 R.id.profile -> {
-                    startActivity(Intent(this@ChecklistActivity, profile::class.java))
+                    startActivity(Intent(this@ChecklistActivity, ProfileActivity::class.java))
                     true
                 }
                 else -> false
@@ -154,7 +153,17 @@ class ChecklistActivity : AppCompatActivity() {
         }).attachToRecyclerView(recyclerView)
     }
 
-    private fun onMicClicked(){// on below line we are calling speech recognizer intent.
+    private fun onMicClicked(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.RECORD_AUDIO,
+                ),
+                3
+            )
+        }
+        // on below line we are calling speech recognizer intent.
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
 
         // on below line we are passing language model

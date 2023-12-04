@@ -69,11 +69,10 @@ class ChecklistAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.d(tag,"look inside bind")
         val item = dataSet?.get(position)
         holder.info.text = item?.item ?: "Empty"
         holder.checkBox.isChecked = item?.isChecked.toBoolean()
-        if(item?.completionDate != "null"){
+        if(item?.completionDate != "null" && item?.completionDate != "" &&!item?.completionDate.isNullOrBlank()){
             holder.date.text = item?.completionDate ?: "Empty"
             holder.date.visibility = View.VISIBLE
         }

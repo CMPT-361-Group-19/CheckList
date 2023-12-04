@@ -32,7 +32,7 @@ class NewGroupActivity : AppCompatActivity() {
                     true
                 }
                 R.id.profile -> {
-                    startActivity(Intent(this@NewGroupActivity, profile::class.java))
+                    startActivity(Intent(this@NewGroupActivity, ProfileActivity::class.java))
                     true
                 }
 
