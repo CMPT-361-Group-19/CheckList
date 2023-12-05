@@ -1,14 +1,13 @@
-package com.example.checklist
+package com.example.checklist.adapters
 
-import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.checklist.R
 import com.example.checklist.viewmodel.ChecklistItem
 import com.example.checklist.viewmodel.ChecklistViewModel
 
@@ -69,11 +68,10 @@ class ChecklistAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.d(tag,"look inside bind")
         val item = dataSet?.get(position)
         holder.info.text = item?.item ?: "Empty"
         holder.checkBox.isChecked = item?.isChecked.toBoolean()
-        if(item?.completionDate != "null"){
+        if(item?.completionDate != "null" && item?.completionDate != "" &&!item?.completionDate.isNullOrBlank()){
             holder.date.text = item?.completionDate ?: "Empty"
             holder.date.visibility = View.VISIBLE
         }

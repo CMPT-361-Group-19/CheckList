@@ -1,4 +1,4 @@
-package com.example.checklist
+package com.example.checklist.activities
 
 import android.content.Intent
 import android.net.Uri
@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.example.checklist.R
 import com.example.checklist.viewmodel.ChecklistViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
