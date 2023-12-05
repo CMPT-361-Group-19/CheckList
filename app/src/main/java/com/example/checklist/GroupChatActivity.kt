@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.checklist.activities.NewGroupActivity
 import com.example.checklist.groupchat.MsgAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
@@ -109,7 +110,7 @@ class GroupChatActivity:AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.group -> {
-                    val intent = Intent(this,NewGroupActivity::class.java)
+                    val intent = Intent(this, NewGroupActivity::class.java)
                     intent.putExtra("user", username)
                     startActivity(intent)
                     true
