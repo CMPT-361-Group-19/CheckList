@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- fragment_group_chat.xml -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_gravity="bottom"
-    android:layout_alignParentEnd="true"
-    >
+    android:layout_alignParentEnd="true">
 
     <!-- Toolbar for the group chat -->
 
@@ -17,7 +16,7 @@
         android:id="@+id/toolbar_group_chat"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/navy_blue"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -60,6 +59,8 @@
             android:layout_marginStart="8dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
+            app:backgroundTint="@null"
+            android:background="@drawable/rounded_color_view_navy_blue"
             android:text="Send"
             android:textAllCaps="false"
             android:textColor="@android:color/white" />
