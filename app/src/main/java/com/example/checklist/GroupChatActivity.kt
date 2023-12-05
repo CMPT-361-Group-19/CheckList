@@ -104,6 +104,7 @@ class GroupChatActivity:AppCompatActivity() {
 
 
                 database.writeGroupchatMsg(groupIdentifier,username, msgContent.text.toString(), formattedDate)
+                msgContent.setText("")
             }
         }
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
