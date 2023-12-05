@@ -1,42 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- fragment_group_chat.xml -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:layout_alignParentEnd="true"
     android:layout_gravity="bottom"
-    android:layout_alignParentEnd="true">
+    android:orientation="vertical">
 
     <!-- Toolbar for the group chat -->
 
     <!-- RecyclerView to display messages -->
+
+    <!-- Input area for typing messages -->
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_group_chat"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/navy_blue"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view_messages"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_messages"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="450dp"
 
+        android:background="@android:color/white"
+        android:clipToPadding="false"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:clipToPadding="false"
-        android:background="@android:color/white"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.343" />
 
-    <!-- Input area for typing messages -->
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/navigationDrawer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_messages">
 
         <EditText
             android:id="@+id/edit_text_message"
@@ -59,12 +73,20 @@
             android:layout_marginStart="8dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            app:backgroundTint="@null"
-            android:background="@drawable/rounded_color_view_navy_blue"
             android:text="Send"
             android:textAllCaps="false"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
-    <include layout="@layout/navigation_drawer"/>
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/navigationDrawer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:verticalScrollbarPosition="defaultPosition"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <include layout="@layout/navigation_drawer" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
