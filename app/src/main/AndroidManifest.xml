@@ -32,6 +32,10 @@
             android:name=".profile"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".GroupChatActivity"
+            android:exported="false"
+            />
 
         <activity
             android:name=".AddItemActivity"

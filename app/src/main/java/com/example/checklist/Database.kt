@@ -11,6 +11,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.IgnoreExtraProperties
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.values
 import kotlinx.coroutines.Dispatchers
@@ -428,6 +429,42 @@ class Database {
             database.child("accounts").child(username).child("password").setValue(newPassword)
         }
     }
+
+    fun writeGroupchatMsg(groupId: String, username: String, message: String, date: String) {
+        database = Firebase.database.reference
+
+
+        database.child("groups").child(groupId).child("groupchat").child(date).child("message").setValue(message)
+        database.child("groups").child(groupId).child("groupchat").child(date).child("sender").setValue(username)
+
+
+    }
+
+    suspend fun getGroupMessages(groupId: String): ArrayList<ArrayList<String>> {
+        database = Firebase.database.reference
+        var messageList: ArrayList<ArrayList<String>> = ArrayList()
+        var i = 0
+
+        val dataSnapshot = database.child("groups").child(groupId).child("groupchat").get().await()
+        for (snapshot in dataSnapshot.children) {
+            val message = database.child("groups").child(groupId)
+                .child("groupchat").child(snapshot.key.toString()).child("message").get().await()
+
+            val timestamp = snapshot.key.toString()
+            val sender = database.child("groups").child(groupId)
+                .child("groupchat").child(snapshot.key.toString()).child("sender").get().await()
+            var messageData: ArrayList<String> = ArrayList()
+            //Log.i("testing", "${sender.value}")
+            messageData.add(timestamp)
+            messageData.add(sender.value.toString())
+            messageData.add(message.value.toString())
+            messageList.add(messageData)
+
+        }
+        return messageList
+    }
+
+
 
 
 

@@ -89,6 +89,11 @@ class ChecklistActivity : AppCompatActivity() {
             checkListAdapter.updateDataset(it)
             checkListAdapter.notifyDataSetChanged()
         }
+        findViewById<ImageView>(R.id.chatButton).setOnClickListener{
+            val intent = Intent(this,GroupChatActivity::class.java)
+            intent.putExtra("groupId",groupIdentifier)
+            startActivity(intent)
+        }
 
         findViewById<ImageView>(R.id.addButton).setOnClickListener{
             val intent = Intent(this,AddItemActivity::class.java)
