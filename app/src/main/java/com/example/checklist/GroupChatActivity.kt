@@ -116,7 +116,7 @@ class GroupChatActivity:AppCompatActivity() {
                     true
                 }
                 R.id.home -> {
-                    // Already in Home, do nothing or refresh if needed
+                    startActivity(Intent(this, GroupViewActivity::class.java))
                     true
                 }
                 else -> false
