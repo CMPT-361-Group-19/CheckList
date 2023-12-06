@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.checklist.GroupChatActivity
 import com.example.checklist.adapters.ChecklistAdapter
 import com.example.checklist.R
 import com.example.checklist.viewmodel.ChecklistItem
@@ -89,6 +90,11 @@ class ChecklistActivity : AppCompatActivity() {
             Log.d(tag," inside checklist3")
             checkListAdapter.updateDataset(it)
             checkListAdapter.notifyDataSetChanged()
+        }
+        findViewById<ImageView>(R.id.chatButton).setOnClickListener{
+            val intent = Intent(this, GroupChatActivity::class.java)
+            intent.putExtra("groupId",groupIdentifier)
+            startActivity(intent)
         }
 
         findViewById<ImageView>(R.id.addButton).setOnClickListener{
