@@ -12,7 +12,7 @@
 <img align= "right" src ="https://github.com/CMPT-361-Group-19/CheckList/assets/113317290/2798b259-51ff-419d-982d-492e0c3095a1" alt = "7E1494BB-081D-48F9-82A9-0F1C56484A0F_1_102_o" width = "270">
 
 ### Setup instructions
-Note: Make Sure you are using Android 14 for the App
+Note: Make sure you are using Android 14
 1. Please allow notifications
 2. Please allow location tracking at all times
 3. If you want to test on a set up account -> Username: bhakti Password: 1234
